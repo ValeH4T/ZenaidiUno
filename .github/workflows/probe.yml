@@ -1,0 +1,19 @@
+name: probe
+on: { push: { branches: [probe] } }
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: CORS checks
+        run: |
+          O="Origin: https://valeh4t.github.io"
+          BODY=$(curl -s "https://zenaidiuno-shadowing-v2.hf.space/api/req?u=https://youtu.be/dQw4w9WgXcQ")
+          echo "body: ${BODY:0:200}"
+          for H in youtubei.googleapis.com www.youtube.com m.youtube.com; do
+            P=$(curl -s -o /dev/null -D - -X OPTIONS "https://$H/youtubei/v1/player?prettyPrint=false" -H "$O" -H "Access-Control-Request-Method: POST" -H "Access-Control-Request-Headers: content-type" | tr -d '\r' | grep -i "^HTTP\|^access-control" | tr '\n' ' ')
+            echo "::notice title=preflight $H::$P"
+            R=$(curl -s -D /tmp/h -X POST "https://$H/youtubei/v1/player?prettyPrint=false" -H "$O" -H "Content-Type: text/plain;charset=UTF-8" --data "$BODY" | head -c 400000)
+            HD=$(tr -d '\r' < /tmp/h | grep -i "^HTTP\|^access-control" | tr '\n' ' ')
+            PS=$(echo "$R" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('playabilityStatus',{}).get('status'), len(d.get('captions',{}).get('playerCaptionsTracklistRenderer',{}).get('captionTracks',[])))" 2>&1 | tail -1)
+            echo "::notice title=simple POST $H::$HD | $PS"
+          done

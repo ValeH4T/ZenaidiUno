@@ -38,6 +38,8 @@ svg{display:block}
 .iconbtn{width:52px;height:52px;border-radius:14px;background:var(--btn);display:grid;place-items:center;flex:none}
 .go{width:100%;height:52px;border-radius:14px;background:var(--accent);color:#fff;font-weight:600;font-size:17px;margin-top:10px}
 .go:active{filter:brightness(.92)}
+a.go{display:grid;place-items:center;text-decoration:none}
+.gohint{color:var(--muted);font-size:14px;line-height:1.6;margin:8px 2px 0}
 .msg{margin-top:12px;padding:12px 14px;border-radius:12px;background:#fdecea;color:#8a2c1d;font-size:15px;line-height:1.5}
 .libh{margin:30px 0 10px;font-size:15px;color:var(--muted);font-weight:600}
 .lib{display:flex;flex-direction:column;gap:10px}
@@ -111,6 +113,7 @@ header .sub{font-size:13px;color:var(--muted);margin-top:2px}
 .mic.ok .ic-ok{display:block}
 .mic.bad{background:var(--bad);color:#fff}
 .mic.rec{background:var(--bad);color:#fff;animation:pulse 1s ease-in-out infinite}
+.mic.wait{background:var(--accent);color:#fff;animation:pulse 1s ease-in-out infinite}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(217,48,37,.45)}50%{box-shadow:0 0 0 9px rgba(217,48,37,0)}}
 .txt{font-size:var(--font);line-height:1.45;margin-top:4px;font-weight:500}
 .tr{font-size:calc(var(--font) * .8);line-height:1.6;color:#57524b;margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
@@ -126,6 +129,7 @@ header .sub{font-size:13px;color:var(--muted);margin-top:2px}
 .card.on .mic{background:#fff}
 .card.on .mic.ok{background:var(--ok)}
 .card.on .mic.bad,.card.on .mic.rec{background:var(--bad)}
+.card.on .mic.wait{background:var(--accent)}
 .card.on .tr{border-color:#c9d1ee}
 .card.inrange{border-inline-start:5px solid var(--accent)}
 .card.pickA{box-shadow:inset 0 0 0 2.5px var(--accent)}
@@ -173,15 +177,8 @@ header .sub{font-size:13px;color:var(--muted);margin-top:2px}
     <div class="langsw" role="group" aria-label="Language"><button type="button" data-l="ar">AR</button><button type="button" data-l="it">IT</button><button type="button" data-l="en">EN</button></div>
   </div>
   <p class="tag" data-t="tag"></p>
-  <form id="form" autocomplete="off">
-    <div class="inrow">
-      <input id="url" type="url" inputmode="url" placeholder="https://youtu.be/..." aria-label="YouTube">
-      <button type="button" class="iconbtn" id="paste" data-ta="paste">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>
-      </button>
-    </div>
-    <button class="go" type="submit" data-t="start"></button>
-  </form>
+  <a class="go" id="openYt" href="https://www.youtube.com/" target="_blank" rel="noopener" data-t="openYt"></a>
+  <p class="gohint" data-t="openYtHint"></p>
   <div id="homemsg" class="msg hidden"></div>
   <div class="libh" data-t="yourVideos"></div>
   <div id="lib" class="lib"></div>
@@ -310,7 +307,7 @@ const P = 'sh3:';
 /* ================= texts in the device's language ================= */
 const STR = {
 ar: {
-  tag:'الصق رابط فيديو يوتيوب، وتمرّن عليه جملة جملة.', start:'ابدأ', paste:'لصق', yourVideos:'فيديوهاتك',
+  tag:'تمرّن على أي فيديو يوتيوب جملة جملة.', openYt:'افتح يوتيوب واختر فيديو', openYtHint:'بعدها اضغط «مشاركة»، ثم «المزيد»، ثم Shadowing، ويفتح الدرس هنا. أول مرة لازم تسوي الاختصار (تحت).', start:'ابدأ', paste:'لصق', yourVideos:'فيديوهاتك',
   noVideos:'ما فيه فيديوهات للحين. الفيديوهات اللي تفتحها تنحفظ هنا في جهازك.',
   howNew:'طريقة فتح فيديو جديد', fromIphone:'📱 من الآيفون', iphoneHow:'في تطبيق يوتيوب اضغط «مشاركة» ثم «Shadowing»، ويفتح الدرس هنا مباشرة.',
   setupBtn:'إعداد الاختصار (مرة وحدة)', fromComputer:'💻 من الكمبيوتر',
@@ -330,7 +327,7 @@ ar: {
   pickFirst:'اختر أول جملة', pickLast:'الحين اختر آخر جملة', rangeOn:'تكرار الجمل من {a} إلى {b}', rangeOff:'انلغى تكرار المجموعة',
   tapContinue:'اضغط ▶ أو الجملة عشان تكمل', iosTap:'إذا ما اشتغل الفيديو، اضغط عليه مرة وحدة بنفسك (أول مرة بس)',
   embedBlocked:'صاحب الفيديو مانع تشغيله خارج يوتيوب', videoErr:'الفيديو ما اشتغل (خطأ {e})', trFail:'بعض الجمل ما انترجمت.',
-  micNo:'المتصفح هذا ما يدعم التعرّف على الصوت. استخدم Safari على الآيفون.', micDenied:'لازم تسمح للصفحة تستخدم المايك (وفعّل الإملاء Dictation في الآيفون).',
+  micNo:'المتصفح هذا ما يسمح باستخدام المايك.', micDenied:'لازم تسمح للصفحة تستخدم المايك. إذا رفضته قبل، اسمح له من إعدادات سفاري للموقع.', checking:'أتأكد من نطقك…', asrFail:'ما قدرت أتأكد من النطق الحين (النت أو السيرفر). جرّب مرة ثانية.',
   micNothing:'ما سمعت شي. اضغط المايك وقل الجملة بصوت واضح.', speakNow:'تكلّم الحين…', micErr:'المايك ما اشتغل ({e}). اضغطه مرة ثانية.', heard:'سمعت', correct:'صح', full:'🎉 مبروك! خلّصت الفيديو كامل: 100/100',
   copy:'نسخ', copied:'انسخ ✓', selected:'محدد. اضغط نسخ',
   playPause:'تشغيل / إيقاف', prev:'الجملة السابقة', next:'الجملة التالية', loopBtn:'تكرار الجملة', rangeBtn:'تكرار مجموعة جمل', micBtn:'اختبر نطقك', sayBtn:'إعادة الجملة',
@@ -347,7 +344,7 @@ ar: {
   useTitle:'الاستخدام:', u1:'افتح الفيديو في تطبيق يوتيوب.', u2:'اضغط «مشاركة».', u3:'اضغط «المزيد» واختر Shadowing.', u4:'أول مرة بيسألك أكثر من مرة عن السماح بالاتصال. اختر «السماح دائماً» كل مرة.'
 },
 en: {
-  tag:'Paste a YouTube link and practise it sentence by sentence.', start:'Start', paste:'Paste', yourVideos:'Your videos',
+  tag:'Practise any YouTube video sentence by sentence.', openYt:'Open YouTube and pick a video', openYtHint:'Then tap “Share”, “More” and Shadowing: the lesson opens here. The first time, set up the shortcut (below).', start:'Start', paste:'Paste', yourVideos:'Your videos',
   noVideos:'No videos yet. Videos you open are saved on this device.',
   howNew:'How to open a new video', fromIphone:'📱 From iPhone', iphoneHow:'In the YouTube app, tap “Share”, then “Shadowing”. The lesson opens here.',
   setupBtn:'Set up the shortcut (once)', fromComputer:'💻 From a computer',
@@ -367,7 +364,7 @@ en: {
   pickFirst:'Pick the first sentence', pickLast:'Now pick the last sentence', rangeOn:'Repeating sentences {a} to {b}', rangeOff:'Group repeat cancelled',
   tapContinue:'Tap ▶ or the sentence to continue', iosTap:'If the video doesn’t start, tap it once yourself (first time only)',
   embedBlocked:'The owner doesn’t allow this video to play outside YouTube', videoErr:'The video didn’t play (error {e})', trFail:'Some sentences weren’t translated.',
-  micNo:'This browser can’t recognise speech. Use Safari on iPhone.', micDenied:'Allow the page to use the microphone (and turn on Dictation on iPhone).',
+  micNo:'This browser can’t use the microphone.', micDenied:'Allow the page to use the microphone. If you refused it before, allow it in Safari’s settings for this website.', checking:'Checking your pronunciation…', asrFail:'Couldn’t check it right now (connection or server). Try again.',
   micNothing:'I didn’t hear anything. Tap the mic and say the sentence clearly.', speakNow:'Speak now…', micErr:'The mic didn’t start ({e}). Tap it again.', heard:'Heard', correct:'Correct', full:'🎉 Well done! You finished the whole video: 100/100',
   copy:'Copy', copied:'Copied ✓', selected:'Selected. Tap Copy',
   playPause:'Play / pause', prev:'Previous sentence', next:'Next sentence', loopBtn:'Repeat sentence', rangeBtn:'Repeat a group of sentences', micBtn:'Test your pronunciation', sayBtn:'Replay sentence',
@@ -384,7 +381,7 @@ en: {
   useTitle:'How to use it:', u1:'Open the video in the YouTube app.', u2:'Tap “Share”.', u3:'Tap “More” and choose Shadowing.', u4:'The first time it asks a few times to allow the connection. Choose “Always Allow” each time.'
 },
 it: {
-  tag:'Incolla un link di YouTube ed esercitati frase per frase.', start:'Inizia', paste:'Incolla', yourVideos:'I tuoi video',
+  tag:'Esercitati su qualsiasi video di YouTube, frase per frase.', openYt:'Apri YouTube e scegli un video', openYtHint:'Poi tocca «Condividi», «Altro» e Shadowing: la lezione si apre qui. La prima volta configura il comando rapido (sotto).', start:'Inizia', paste:'Incolla', yourVideos:'I tuoi video',
   noVideos:'Ancora nessun video. I video che apri vengono salvati su questo dispositivo.',
   howNew:'Come aprire un nuovo video', fromIphone:'📱 Da iPhone', iphoneHow:'Nell’app YouTube tocca «Condividi», poi «Shadowing». La lezione si apre qui.',
   setupBtn:'Configura il comando rapido (una volta)', fromComputer:'💻 Dal computer',
@@ -404,7 +401,7 @@ it: {
   pickFirst:'Scegli la prima frase', pickLast:'Ora scegli l’ultima frase', rangeOn:'Ripeto le frasi da {a} a {b}', rangeOff:'Ripetizione del gruppo annullata',
   tapContinue:'Tocca ▶ o la frase per continuare', iosTap:'Se il video non parte, toccalo una volta (solo la prima volta)',
   embedBlocked:'Il proprietario non permette di vedere questo video fuori da YouTube', videoErr:'Il video non è partito (errore {e})', trFail:'Alcune frasi non sono state tradotte.',
-  micNo:'Questo browser non riconosce la voce. Usa Safari su iPhone.', micDenied:'Consenti alla pagina di usare il microfono (e attiva la Dettatura su iPhone).',
+  micNo:'Questo browser non può usare il microfono.', micDenied:'Consenti alla pagina di usare il microfono. Se l’hai rifiutato prima, consentilo nelle impostazioni di Safari per questo sito.', checking:'Controllo la pronuncia…', asrFail:'Non riesco a controllare adesso (connessione o server). Riprova.',
   micNothing:'Non ho sentito niente. Tocca il microfono e di’ la frase chiaramente.', speakNow:'Parla ora…', micErr:'Il microfono non è partito ({e}). Toccalo di nuovo.', heard:'Ho sentito', correct:'Giusto', full:'🎉 Bravo! Hai finito tutto il video: 100/100',
   copy:'Copia', copied:'Copiato ✓', selected:'Selezionato. Tocca Copia',
   playPause:'Play / pausa', prev:'Frase precedente', next:'Frase successiva', loopBtn:'Ripeti la frase', rangeBtn:'Ripeti un gruppo di frasi', micBtn:'Prova la pronuncia', sayBtn:'Riascolta la frase',
@@ -454,7 +451,7 @@ const FONT = {s:'17px', m:'20px', l:'24px'};
 const st = {
   vid:null, data:null, S:[], idx:0, reps:0, player:null, ready:false,
   seekTarget:null, seekAt:0, seekDeadline:0, pending:null, gapTimer:null,
-  userScrollAt:0, trToken:0, hinted:false, cards:[], range:null, pick:false, pickA:null, rec:null, recIdx:-1
+  userScrollAt:0, trToken:0, hinted:false, cards:[], range:null, pick:false, pickA:null, rec:null, checking:-1
 };
 
 /* ================= utils ================= */
@@ -635,8 +632,6 @@ function similarity(target, heard){ // share of the sentence's words heard in or
   return dp[A.length][B.length] / A.length;
 }
 const PASS = 0.75;
-const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-const SR_LOCALE = {it:'it-IT', en:'en-US', es:'es-ES', fr:'fr-FR', de:'de-DE', pt:'pt-PT', ar:'ar-SA', ru:'ru-RU', ja:'ja-JP', zh:'zh-CN', tr:'tr-TR', nl:'nl-NL'};
 
 /* ================= library ================= */
 function lib(){ return LS.get(P+'lib', []); }
@@ -672,16 +667,6 @@ $('#lib').addEventListener('click', e => {
 
 /* ================= home / routing ================= */
 function homeError(msg){ const b = $('#homemsg'); b.textContent = msg; b.classList.remove('hidden'); }
-$('#form').addEventListener('submit', e => {
-  e.preventDefault(); $('#homemsg').classList.add('hidden');
-  const v = vidFrom($('#url').value);
-  if (!v){ homeError(t('badUrl')); return; }
-  $('#url').value = ''; $('#url').blur(); location.hash = 'v=' + v;
-});
-$('#paste').addEventListener('click', async () => {
-  try { const x = await navigator.clipboard.readText(); $('#url').value = x.trim(); if (vidFrom(x)) $('#form').requestSubmit(); }
-  catch(e){ $('#url').focus(); toast(t('pasteHint')); }
-});
 function route(){
   const h = location.hash.replace(/^#/, '');
   const m = h.match(/(?:^|&)v=([A-Za-z0-9_-]{11})/);
@@ -1007,73 +992,128 @@ document.addEventListener('keydown', e => {
 });
 
 /* ================= microphone: say the sentence ================= */
+// The sentence is recorded with the normal microphone and Whisper on the server writes down what it heard.
+// (Safari's own speech recognition stops working on iPhone once the page has played the video.)
+const ASR_URL = (API || location.origin) + '/api/asr';
+let AC = null;
 function micBtn(i){ return st.cards[i] && st.cards[i].querySelector('.mic'); }
-function stopMic(){ if (st.rec){ const r = st.rec; st.rec = null; clearTimeout(st.recTimer); clearTimeout(st.silTimer); try{ r.abort(); }catch(e){} const b = micBtn(st.recIdx); if (b) b.classList.remove('rec'); st.recIdx = -1; } }
-function startMic(i, attempt = 0){
-  if (!SR){ toast(t('micNo'), 4500); return; }
-  if (st.rec){ // tapping the same mic again finishes listening; another sentence's mic switches to it
-    if (st.recIdx === i && !attempt){ try{ st.rec.stop(); }catch(e){} return; }
+function stopMic(){ if (st.rec){ const r = st.rec; st.rec = null; r.cancel(); } }
+function toWav16k(x, sr){
+  const ratio = sr / 16000, n = Math.max(0, Math.floor(x.length / ratio));
+  let peak = 0; for (let k = 0; k < x.length; k++){ const v = Math.abs(x[k]); if (v > peak) peak = v; }
+  const gain = peak > 0 ? Math.min(8, 0.9 / peak) : 1;
+  const buf = new ArrayBuffer(44 + n * 2), dv = new DataView(buf);
+  const str = (o, t) => { for (let k = 0; k < t.length; k++) dv.setUint8(o + k, t.charCodeAt(k)); };
+  str(0, 'RIFF'); dv.setUint32(4, 36 + n * 2, true); str(8, 'WAVE'); str(12, 'fmt '); dv.setUint32(16, 16, true);
+  dv.setUint16(20, 1, true); dv.setUint16(22, 1, true); dv.setUint32(24, 16000, true); dv.setUint32(28, 32000, true);
+  dv.setUint16(32, 2, true); dv.setUint16(34, 16, true); str(36, 'data'); dv.setUint32(40, n * 2, true);
+  for (let k = 0; k < n; k++){ // average over each step = simple low-pass while going down to 16 kHz
+    const a = Math.floor(k * ratio), b = Math.max(a + 1, Math.min(x.length, Math.floor((k + 1) * ratio)));
+    let sum = 0; for (let m = a; m < b; m++) sum += x[m];
+    const v = Math.max(-1, Math.min(1, sum / (b - a) * gain));
+    dv.setInt16(44 + k * 2, v * 0x7fff, true);
+  }
+  return new Blob([buf]); // no type: a "simple" request, so no extra round trip before the upload
+}
+function startMic(i){
+  if (st.rec){
+    if (st.rec.i === i){ st.rec.finish(); return; } // tapping the same mic again = done speaking
     stopMic();
   }
+  if (st.checking === i) return;
+  const md = navigator.mediaDevices, Ctx = window.AudioContext || window.webkitAudioContext;
+  if (!md || !md.getUserMedia || !Ctx){ toast(t('micNo'), 4500); return; }
   clearPending(); pauseVideo();
   if (i !== st.idx) setIdx(i);
   const card = st.cards[i], btn = micBtn(i), heard = card.querySelector('.heard'), s = st.S[i];
-  const r = new SR();
-  r.lang = SR_LOCALE[base(st.data.language_code)] || base(st.data.language_code) || 'it-IT';
-  // continuous: the iPhone otherwise gives up after a short silence; we stop it ourselves
-  r.interimResults = true; r.continuous = true; r.maxAlternatives = 5;
-  let cands = [], live = '', failed = '', gotSpeech = false;
-  btn.classList.remove('bad'); btn.classList.add('rec');
+  try { if (!AC) AC = new Ctx(); if (AC.state !== 'running') AC.resume(); } catch(e){} // must happen inside the tap on iPhone
+  if (!AC){ toast(t('micNo'), 4500); return; }
+  const wasOk = btn.classList.contains('ok');
+  btn.classList.remove('bad', 'ok', 'wait'); btn.classList.add('rec');
   heard.className = 'heard'; heard.textContent = '🎙 …';
-  const finishIn = ms => { clearTimeout(st.silTimer); st.silTimer = setTimeout(() => { try{ r.stop(); }catch(e){} }, ms); };
-  r.onstart = () => { if (st.rec === r && !gotSpeech) heard.textContent = '🎙 ' + t('speakNow'); };
-  r.onresult = e => {
-    gotSpeech = true;
-    const res = Array.from(e.results);
-    live = res.map(x => x[0].transcript).join(' ').trim();
-    heard.textContent = '🎙 ' + live;
-    const maxAlt = Math.max(...res.map(x => x.length));
-    cands = Array.from({length: maxAlt}, (_, a) => res.map(x => x[Math.min(a, x.length - 1)].transcript).join(' '));
-    // stop as soon as the whole sentence was heard, otherwise after a short silence
-    finishIn(similarity(s.text, live) >= 0.999 ? 300 : (res[res.length - 1].isFinal ? 1300 : 2200));
+
+  const rec = st.rec = { i, stopped:false };
+  let stream = null, srcNode = null, proc = null, sr = 48000, elapsed = 0;
+  let speechAt = -1, lastLoud = -1, loudRun = 0, noise = -1;
+  const chunks = [];
+  const MAX = Math.min(25, Math.max(6, (s.end - s.start) * 2.2 + 3)); // seconds
+  const resetBtn = () => { btn.classList.remove('rec', 'wait'); if (wasOk) btn.classList.add('ok'); };
+  const release = () => {
+    clearTimeout(rec.timer);
+    if (proc) proc.onaudioprocess = null;
+    try { if (proc) proc.disconnect(); } catch(e){} try { if (srcNode) srcNode.disconnect(); } catch(e){}
+    if (stream) stream.getTracks().forEach(tr => { try { tr.stop(); } catch(e){} });
+    try { if (AC && AC.state === 'running') AC.suspend(); } catch(e){} // give the sound back to the video
   };
-  r.onerror = e => { failed = e.error || 'error'; };
-  r.onend = () => {
-    clearTimeout(st.recTimer); clearTimeout(st.silTimer);
-    if (st.rec !== r) return;
-    st.rec = null; st.recIdx = -1; btn.classList.remove('rec');
-    if (failed === 'not-allowed' || failed === 'service-not-allowed'){ heard.className = 'heard wrong'; heard.textContent = t('micDenied'); return; }
-    if (!gotSpeech){
-      // the iPhone sometimes refuses to record while the video's sound is still on: try once more after it stops
-      if (attempt < 1 && failed !== 'no-speech'){ heard.textContent = '🎙 …'; setTimeout(() => { if (!st.rec) startMic(i, attempt + 1); }, 600); return; }
-      heard.className = 'heard wrong';
-      heard.textContent = failed && failed !== 'no-speech' ? t('micErr', {e: failed}) : t('micNothing');
-      return;
-    }
-    let best = '', score = -1;
-    for (const c of (cands.length ? cands : [live])){ const sc = similarity(s.text, c); if (sc > score){ score = sc; best = c; } }
-    const okNow = score >= PASS, pct = Math.round(score * 100);
+  rec.cancel = () => { if (rec.stopped) return; rec.stopped = true; release(); resetBtn(); heard.className = 'heard'; heard.textContent = ''; };
+  rec.finish = () => { if (rec.stopped) return; rec.stopped = true; release(); if (st.rec === rec) st.rec = null; check(); };
+
+  const check = async () => {
+    if (speechAt < 0){ resetBtn(); heard.className = 'heard wrong'; heard.textContent = t('micNothing'); return; }
+    let len = 0; chunks.forEach(c => len += c.length);
+    const all = new Float32Array(len); let o = 0; chunks.forEach(c => { all.set(c, o); o += c.length; });
+    const a = Math.max(0, Math.floor((speechAt - 0.35) * sr)), b = Math.min(all.length, Math.ceil((lastLoud + 0.45) * sr));
+    const wav = toWav16k(all.subarray(a, Math.max(a + 1, b)), sr);
+    btn.classList.remove('rec'); btn.classList.add('wait');
+    heard.className = 'heard'; heard.textContent = '⏳ ' + t('checking');
+    st.checking = i;
+    let text = null;
+    try {
+      const ctl = new AbortController(), to = setTimeout(() => ctl.abort(), 45000);
+      const r = await fetch(ASR_URL + '?lang=' + encodeURIComponent(base(st.data.language_code) || ''), { method:'POST', body: wav, signal: ctl.signal });
+      clearTimeout(to);
+      const j = await r.json().catch(() => ({}));
+      if (r.ok) text = String(j.text || '').trim();
+    } catch(e){}
+    if (st.checking === i) st.checking = -1;
+    btn.classList.remove('wait');
+    if (text === null){ if (wasOk) btn.classList.add('ok'); heard.className = 'heard wrong'; heard.textContent = t('asrFail'); return; }
+    if (!text){ if (wasOk) btn.classList.add('ok'); heard.className = 'heard wrong'; heard.textContent = t('micNothing'); return; }
+    const score = similarity(s.text, text), okNow = score >= PASS, pct = Math.round(score * 100);
     heard.className = 'heard ' + (okNow ? 'good' : 'wrong');
-    heard.textContent = `${okNow ? '✓' : '✗'} ${t('heard')}: ${best} (${pct}%)`;
+    heard.textContent = `${okNow ? '✓' : '✗'} ${t('heard')}: ${text} (${pct}%)`;
     if (okNow){
       btn.classList.add('ok');
       const done = new Set(st.data.done || []); const before = scoreOf(st.data); done.add(i); st.data.done = [...done];
       updateScore(); saveSoon();
       if (scoreOf(st.data) >= 100 && before < 100) toast(t('full'), 6000);
     } else {
-      const wasOk = btn.classList.contains('ok');
-      btn.classList.remove('ok'); btn.classList.add('bad');
+      btn.classList.add('bad');
       setTimeout(() => { btn.classList.remove('bad'); if (wasOk) btn.classList.add('ok'); }, 1600);
     }
   };
-  st.rec = r; st.recIdx = i;
-  try { r.start(); }
-  catch(e){
-    st.rec = null; st.recIdx = -1; btn.classList.remove('rec');
-    if (attempt < 1){ setTimeout(() => startMic(i, attempt + 1), 600); return; }
-    heard.className = 'heard wrong'; heard.textContent = t('micErr', {e: e.name || 'start'}); return;
-  }
-  st.recTimer = setTimeout(() => { try{ r.stop(); }catch(e){} }, Math.min(20000, (s.end - s.start) * 2000 + 6000));
+
+  md.getUserMedia({ audio: { echoCancellation:true, noiseSuppression:true, autoGainControl:true } }).then(ms => {
+    stream = ms;
+    if (rec.stopped){ release(); return; }
+    if (AC.state !== 'running') AC.resume().catch(() => {});
+    sr = AC.sampleRate;
+    srcNode = AC.createMediaStreamSource(stream);
+    proc = AC.createScriptProcessor(2048, 1, 1);
+    proc.onaudioprocess = ev => {
+      if (rec.stopped) return;
+      const x = ev.inputBuffer.getChannelData(0), dt = x.length / sr;
+      chunks.push(new Float32Array(x));
+      let sum = 0; for (let k = 0; k < x.length; k++) sum += x[k] * x[k];
+      const rms = Math.sqrt(sum / x.length), at = elapsed; elapsed += dt;
+      if (at < 0.15) return; // the first moment of the microphone is often a click
+      noise = noise < 0 ? rms : Math.min(noise * 1.01 + 1e-5, Math.max(rms, 1e-4)); // quietest recent level
+      const loud = rms > Math.max(0.012, noise * 3);
+      if (loud){ loudRun += dt; lastLoud = elapsed; if (speechAt < 0 && loudRun >= 0.09) speechAt = Math.max(0, elapsed - loudRun); }
+      else loudRun = 0;
+      if (speechAt >= 0 && elapsed - lastLoud > 1.0) rec.finish();      // quiet for a second after speaking
+      else if (speechAt < 0 && elapsed > 7) rec.finish();                // nothing said
+      else if (elapsed > MAX) rec.finish();                              // too long
+    };
+    srcNode.connect(proc); proc.connect(AC.destination); // (the processor only runs when connected; it outputs silence)
+    heard.textContent = '🎙 ' + t('speakNow');
+    rec.timer = setTimeout(() => rec.finish(), (MAX + 2) * 1000);
+  }).catch(e => {
+    if (rec.stopped) return;
+    rec.stopped = true; if (st.rec === rec) st.rec = null; release(); resetBtn();
+    heard.className = 'heard wrong';
+    heard.textContent = e && (e.name === 'NotAllowedError' || e.name === 'SecurityError') ? t('micDenied') : t('micErr', {e: (e && e.name) || 'mic'});
+  });
 }
 
 /* ================= translation into the page ================= */

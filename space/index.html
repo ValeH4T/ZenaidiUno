@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Shadowing</title>
+<meta name="theme-color" content="#f8f6f2">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Shadowing">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="apple-touch-icon" href="/icon-180.png">
+<link rel="icon" href="/icon-192.png">
+<link rel="manifest" href="/manifest.json">
+<style>
+:root{
+  --bg:#f8f6f2; --card:#fff; --ink:#1f1d1a; --muted:#8c867e; --line:#ebe6df;
+  --accent:#06259d; --accent-ink:#06207f; --accent-soft:#e4e8f6; --accent-line:#9ba8d8;
+  --btn:#efece8; --font:20px;
+  --sat:env(safe-area-inset-top); --sab:env(safe-area-inset-bottom);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,"Noto Naskh Arabic",Tahoma,sans-serif}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-action:manipulation}
+svg{display:block}
+.hidden{display:none!important}
+.rtl{direction:rtl;text-align:right}
+
+/* ---------- home ---------- */
+#home{max-width:680px;margin:0 auto;padding:calc(28px + var(--sat)) 18px calc(30px + var(--sab))}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.logo{width:44px;height:44px;border-radius:12px;background:var(--accent);display:grid;place-items:center;color:#fff;flex:none}
+.brand h1{margin:0;font-size:28px;letter-spacing:-.5px}
+.tag{color:var(--muted);margin:2px 0 22px;font-size:15px}
+.inrow{display:flex;gap:8px}
+.inrow input{flex:1;min-width:0;height:52px;border-radius:14px;border:1.5px solid var(--line);background:#fff;
+  padding:0 14px;font-size:16px;direction:ltr;text-align:left;outline:none}
+.inrow input:focus{border-color:var(--accent-line)}
+.iconbtn{width:52px;height:52px;border-radius:14px;background:var(--btn);display:grid;place-items:center;flex:none}
+.go{width:100%;height:52px;border-radius:14px;background:var(--accent);color:#fff;font-weight:600;font-size:17px;margin-top:10px}
+.go:active{filter:brightness(.92)}
+.msg{margin-top:12px;padding:12px 14px;border-radius:12px;background:#fdecea;color:#8a2c1d;font-size:15px;line-height:1.5}
+.msg small{display:block;color:#a46a5f;margin-top:6px;direction:ltr;text-align:left;font-size:11px;word-break:break-word}
+.libh{margin:30px 0 10px;font-size:15px;color:var(--muted);font-weight:600}
+.lib{display:flex;flex-direction:column;gap:10px}
+.item{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:8px;cursor:pointer}
+.item img{width:112px;height:63px;border-radius:9px;object-fit:cover;background:#ddd;flex:none}
+.item .t{flex:1;min-width:0}
+.item .t b{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:15px;font-weight:600;line-height:1.35}
+.item .t span{font-size:13px;color:var(--muted)}
+.del{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;color:var(--muted);flex:none}
+.empty{color:var(--muted);font-size:14px;padding:8px 2px;line-height:1.6}
+.hcard{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px;line-height:1.7;font-size:15px}
+.hcard p{margin:4px 0 10px;color:#4a463f}
+.hcard .pill{display:inline-block;text-decoration:none}
+.bm{display:inline-block;padding:9px 16px;border-radius:999px;background:var(--accent);color:#fff;text-decoration:none;font-weight:600;direction:ltr;cursor:grab}
+
+/* ---------- setup ---------- */
+#setup{max-width:680px;margin:0 auto;padding:calc(10px + var(--sat)) 16px calc(40px + var(--sab))}
+#setup .top{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+#setup .top b{font-size:19px}
+#setup .lead{line-height:1.8;font-size:15.5px;color:#3d3a35;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+#setup ol{padding-inline-start:22px;line-height:1.9;font-size:15.5px}
+#setup li{margin-bottom:14px}
+.copy{display:flex;gap:6px;align-items:center;margin:6px 0;direction:ltr}
+.copy code{flex:1;min-width:0;background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:8px 10px;font-size:12.5px;word-break:break-all;line-height:1.4}
+.copy button{flex:none;padding:8px 12px;border-radius:10px;background:var(--accent);color:#fff;font-size:14px}
+
+/* ---------- player ---------- */
+#player{height:100vh;height:100dvh;display:flex;flex-direction:column;max-width:820px;margin:0 auto;overflow:hidden}
+header{display:flex;align-items:center;gap:6px;padding:calc(6px + var(--sat)) 10px 8px;flex:none}
+header .mid{flex:1;min-width:0;text-align:center}
+header .ttl{font-weight:600;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+header .sub{font-size:13px;color:var(--muted);margin-top:2px}
+.hbtn{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;flex:none}
+.hbtn.gear{background:var(--btn)}
+.vwrap{position:relative;width:min(100%, calc(42vh * 16 / 9));align-self:center;aspect-ratio:16/9;background:#000;flex:none}
+.vwrap>div,.vwrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.ctrls{display:flex;justify-content:center;align-items:center;gap:18px;padding:14px 10px;border-bottom:1px solid var(--line);flex:none;direction:ltr}
+.cb{width:58px;height:58px;border-radius:50%;background:var(--btn);display:grid;place-items:center;transition:transform .08s}
+.cb:active{transform:scale(.93)}
+.cb.play{width:72px;height:72px;background:var(--accent);color:#fff}
+.cb.loop{background:var(--accent-soft);color:var(--accent)}
+.cb.loop.on{background:var(--accent);color:#fff}
+.cb .badge{position:absolute}
+#list{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 14px calc(40vh + var(--sab))}
+.card{position:relative;background:var(--card);border:1.5px solid transparent;border-radius:18px;padding:14px 16px 14px;margin-bottom:12px;
+  box-shadow:0 1px 0 var(--line);cursor:pointer;overflow:hidden}
+.card .row{display:flex;align-items:center;justify-content:space-between;min-height:22px;direction:ltr}
+.ts{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.say{width:34px;height:34px;border-radius:50%;background:var(--accent);color:#fff;display:none;place-items:center}
+.reps{font-size:12px;font-weight:700;color:var(--accent);margin-inline-start:auto;margin-inline-end:8px;display:none}
+.txt{font-size:var(--font);line-height:1.45;margin-top:4px;font-weight:500}
+.tr{font-size:calc(var(--font) * .8);line-height:1.6;color:#57524b;margin-top:10px;padding-top:10px;border-top:1px solid var(--line);direction:rtl;text-align:right}
+.tr:empty{display:none}
+.card.on{background:var(--accent-soft);border-color:var(--accent-line);box-shadow:none}
+.card.on .txt{color:var(--accent-ink)}
+.card.on .ts{color:var(--accent-ink)}
+.card.on .say{display:grid}
+.card.on .tr{border-color:#c9d1ee}
+.loopmode .card.on .reps{display:block}
+.prog{position:absolute;left:0;bottom:0;height:3px;background:var(--accent);width:0;opacity:0}
+.card.on .prog{opacity:.75}
+.card.wait .prog{background:#9ba8d8;opacity:1}
+.waitnote{display:none;font-size:13px;color:var(--accent-ink);margin-top:8px;direction:rtl;text-align:right}
+.card.wait.tap .waitnote{display:block}
+.state{padding:40px 20px;text-align:center;color:var(--muted);line-height:1.7}
+.spin{width:34px;height:34px;border:3px solid var(--line);border-top-color:var(--accent);border-radius:50%;margin:0 auto 14px;animation:sp 0.9s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.state .btns{display:flex;gap:8px;justify-content:center;margin-top:16px}
+.pill{padding:10px 16px;border-radius:999px;background:var(--btn);font-size:15px}
+.pill.primary{background:var(--accent);color:#fff}
+
+/* ---------- settings sheet ---------- */
+#sheetbg{position:fixed;inset:0;background:rgba(0,0,0,.28);z-index:20}
+#sheet{position:fixed;left:0;right:0;bottom:0;z-index:21;background:var(--bg);border-radius:20px 20px 0 0;
+  max-height:82vh;overflow-y:auto;padding:10px 18px calc(22px + var(--sab));max-width:820px;margin:0 auto}
+.grab{width:40px;height:5px;border-radius:3px;background:#d6d1ca;margin:0 auto 12px}
+#sheet h3{margin:4px 0 14px;font-size:18px}
+.sec{margin-bottom:16px}
+.sec label{display:block;font-size:14px;color:var(--muted);margin-bottom:7px}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{padding:9px 13px;border-radius:11px;background:#fff;border:1.5px solid var(--line);font-size:15px;unicode-bidi:plaintext}
+.seg button.sel{background:var(--accent);border-color:var(--accent);color:#fff}
+#sheet select{width:100%;height:44px;border-radius:11px;border:1.5px solid var(--line);background:#fff;font-size:15px;padding:0 10px}
+.hint{font-size:12.5px;color:var(--muted);margin-top:6px;line-height:1.5}
+
+#toast{position:fixed;left:50%;bottom:calc(24px + var(--sab));transform:translateX(-50%);background:#2a2724;color:#fff;
+  padding:11px 16px;border-radius:12px;font-size:14px;z-index:30;max-width:90vw;text-align:center;direction:rtl;line-height:1.5;
+  opacity:0;pointer-events:none;transition:opacity .2s}
+#toast.show{opacity:1}
+@media (min-width:900px){ #list{padding-bottom:30vh} }
+</style>
+</head>
+<body>
+
+<!-- =============== HOME =============== -->
+<section id="home" class="rtl">
+  <div class="brand">
+    <div class="logo"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+    <h1>Shadowing</h1>
+  </div>
+  <p class="tag">الصق رابط فيديو يوتيوب، وتمرّن عليه جملة جملة.</p>
+  <form id="form" autocomplete="off">
+    <div class="inrow">
+      <input id="url" type="url" inputmode="url" placeholder="https://youtu.be/..." aria-label="رابط يوتيوب">
+      <button type="button" class="iconbtn" id="paste" title="لصق" aria-label="لصق">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>
+      </button>
+    </div>
+    <button class="go" type="submit">ابدأ</button>
+  </form>
+  <div id="homemsg" class="msg hidden"></div>
+  <div class="libh">فيديوهاتك</div>
+  <div id="lib" class="lib"></div>
+  <div class="libh">طريقة فتح فيديو جديد</div>
+  <div class="hcard">
+    <b>📱 من الآيفون</b>
+    <p>في تطبيق يوتيوب: <b>مشاركة ← Shadowing</b>، ويفتح الدرس هنا مباشرة.</p>
+    <a class="pill primary" href="#setup">إعداد الاختصار (مرة وحدة)</a>
+  </div>
+  <div class="hcard">
+    <b>💻 من الكمبيوتر</b>
+    <p>اسحب هذا الزر لشريط المفضلة، وبعدين اضغطه وأنت فاتح أي فيديو في يوتيوب:</p>
+    <a class="bm" id="bm" href="#">▶ Shadowing</a>
+  </div>
+</section>
+
+<!-- =============== SETUP (iPhone Shortcut) =============== -->
+<section id="setup" class="hidden rtl">
+  <div class="top">
+    <button class="hbtn" id="setupBack" aria-label="رجوع">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+    <b>إعداد اختصار الآيفون</b>
+  </div>
+  <p class="lead">تسويه مرة وحدة بس. بعدها أي فيديو في يوتيوب: <b>مشاركة ← Shadowing</b> ويفتح الدرس هنا. الاختصار يطلب بيانات الفيديو بنت جوالك، فيوتيوب ما يحجبه، وما يحتاج أي حساب أو اشتراك.</p>
+  <ol>
+    <li>افتح تطبيق <b>الاختصارات</b> (Shortcuts) ← <b>+</b> ← سمّه <b>Shadowing</b>.</li>
+    <li>أضف إجراء <b>الحصول على محتويات URL</b> (Get Contents of URL). امسح الرابط اللي فيه والصق:
+      <div class="copy"><code data-c="req"></code><button type="button">نسخ</button></div>
+      وبعد آخر حرف مباشرة اختر المتغير <b>مدخلات الاختصار</b> (Shortcut Input).</li>
+    <li>أضف <b>الحصول على محتويات URL</b> ثاني، والرابط:
+      <div class="copy"><code data-c="yt"></code><button type="button">نسخ</button></div>
+      اضغط <b>إظهار المزيد</b>: الطريقة <b>POST</b> ← نص الطلب <b>ملف</b> (File) ← اختر <b>محتويات URL</b> (نتيجة الخطوة 2).</li>
+    <li>أضف <b>الحصول على محتويات URL</b> ثالث، والرابط:
+      <div class="copy"><code data-c="ingest"></code><button type="button">نسخ</button></div>
+      الطريقة <b>POST</b> ← نص الطلب <b>ملف</b> ← <b>محتويات URL</b> (نتيجة الخطوة 3).</li>
+    <li>أضف <b>فتح عناوين URL</b> (Open URLs) واختر <b>محتويات URL</b> (نتيجة الخطوة 4).</li>
+    <li>من زر <b>ⓘ</b> تحت (تفاصيل الاختصار) فعّل <b>إظهار في ورقة المشاركة</b> (Show in Share Sheet).</li>
+  </ol>
+  <p class="lead"><b>الاستخدام:</b> في تطبيق يوتيوب افتح الفيديو ← <b>مشاركة</b> ← <b>المزيد</b> ← <b>Shadowing</b>. أول مرة بيسألك يسمح بالاتصال بـ youtube.com و hf.space ← اختر <b>السماح دائماً</b>.</p>
+</section>
+
+<!-- =============== PLAYER =============== -->
+<section id="player" class="hidden">
+  <header>
+    <button class="hbtn" id="back" aria-label="رجوع">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <div class="mid">
+      <div class="ttl" id="ttl">Shadowing</div>
+      <div class="sub" id="sub">&nbsp;</div>
+    </div>
+    <button class="hbtn gear" id="gear" aria-label="الإعدادات">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </button>
+  </header>
+  <div class="vwrap" id="vwrap"></div>
+  <div class="ctrls">
+    <button class="cb" id="prev" aria-label="الجملة السابقة">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="5" width="2.6" height="14" rx="1"/><path d="M19 5.5v13a.6.6 0 0 1-.93.5L8.6 12.5a.6.6 0 0 1 0-1L18.07 5a.6.6 0 0 1 .93.5z"/></svg>
+    </button>
+    <button class="cb play" id="play" aria-label="تشغيل / إيقاف">
+      <svg id="icoPlay" width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.2v13.6a.7.7 0 0 0 1.06.6l10.9-6.8a.7.7 0 0 0 0-1.2L9.06 4.6A.7.7 0 0 0 8 5.2z"/></svg>
+      <svg id="icoPause" class="hidden" width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1.2"/><rect x="14" y="5" width="4" height="14" rx="1.2"/></svg>
+    </button>
+    <button class="cb loop" id="loop" aria-label="تكرار الجملة">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg>
+    </button>
+    <button class="cb" id="next" aria-label="الجملة التالية">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><rect x="16.4" y="5" width="2.6" height="14" rx="1"/><path d="M5 5.5v13a.6.6 0 0 0 .93.5l9.47-6.5a.6.6 0 0 0 0-1L5.93 5a.6.6 0 0 0-.93.5z"/></svg>
+    </button>
+  </div>
+  <div id="list"></div>
+</section>
+
+<!-- =============== SETTINGS =============== -->
+<div id="sheetbg" class="hidden"></div>
+<div id="sheet" class="hidden rtl" role="dialog" aria-label="الإعدادات">
+  <div class="grab"></div>
+  <h3>الإعدادات</h3>
+  <div class="sec"><label>سرعة الفيديو</label><div class="seg" data-key="speed"></div></div>
+  <div class="sec"><label>كم مرة تتكرر الجملة (لما يكون زر التكرار شغّال)</label><div class="seg" data-key="reps"></div>
+    <div class="hint">∞ = تتكرر لين توقفها. لو اخترت رقم، تنتقل للجملة اللي بعدها تلقائياً.</div></div>
+  <div class="sec"><label>وقفة بعد كل جملة (عشان تعيدها بصوتك)</label><div class="seg" data-key="gap"></div></div>
+  <div class="sec"><label>الترجمة تحت الجملة</label><div class="seg" data-key="tr"></div></div>
+  <div class="sec"><label>حجم الخط</label><div class="seg" data-key="font"></div></div>
+  <div class="sec" id="tracksec"><label>نص الفيديو</label>
+    <select id="track"></select>
+    <div class="hint" id="trackinfo"></div>
+    <div class="seg" style="margin-top:10px"><button type="button" id="refetch">إعادة جلب النص وتقسيم الجمل</button></div>
+  </div>
+</div>
+<div id="toast"></div>
+
+<script>
+(() => {
+'use strict';
+const $ = s => document.querySelector(s);
+const API = '';
+const LS = {
+  get(k, d){ try{ const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); return true; }catch(e){ return false; } },
+  del(k){ try{ localStorage.removeItem(k); }catch(e){} }
+};
+const OPTIONS = {
+  speed: [[0.5,'0.5×'],[0.75,'0.75×'],[1,'1×'],[1.25,'1.25×']],
+  reps:  [[0,'∞'],[2,'2'],[3,'3'],[5,'5']],
+  gap:   [['0','بدون'],['1','ثانية'],['2','ثانيتين'],['3','3 ثواني'],['len','بطول الجملة'],['tap','لين أضغط']],
+  tr:    [['ar','العربية'],['en','English'],['off','إخفاء']],
+  font:  [['s','صغير'],['m','وسط'],['l','كبير']],
+};
+const FONT = {s:'17px', m:'20px', l:'24px'};
+const TR_VER = 2; // bump when the server's translation method changes, so saved translations are redone
+const settings = Object.assign({speed:1, reps:0, gap:'0', tr:'ar', font:'m', loop:false}, LS.get('sh2:settings', {}));
+const saveSettings = () => LS.set('sh2:settings', settings);
+
+const st = {
+  vid:null, data:null, S:[], idx:0, reps:0, player:null, ready:false,
+  seekTarget:null, seekAt:0, seekDeadline:0, pending:null, gapTimer:null,
+  userScrollAt:0, trToken:0, hinted:false, cards:[]
+};
+
+/* ---------------- utils ---------------- */
+function fmt(t){ t = Math.max(0, Math.floor(t)); const h=Math.floor(t/3600), m=Math.floor(t%3600/60), s=t%60;
+  return (h? h+':'+String(m).padStart(2,'0') : m) + ':' + String(s).padStart(2,'0'); }
+function esc(s){ return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function vidFrom(raw){
+  raw = (raw||'').trim();
+  if (/^[A-Za-z0-9_-]{11}$/.test(raw)) return raw;
+  const m = raw.match(/(?:v=|\/v\/|youtu\.be\/|\/embed\/|\/shorts\/|\/live\/)([A-Za-z0-9_-]{11})/);
+  return m ? m[1] : null;
+}
+let toastT;
+function toast(msg, ms=3200){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'), ms); }
+const base = c => (c||'').split('-')[0].toLowerCase();
+
+/* ---------------- library ---------------- */
+function lib(){ return LS.get('sh2:lib', []); }
+function saveVideo(){
+  if (!st.data || !st.vid || !st.S.length) return;
+  st.data.idx = st.idx;
+  if (!LS.set('sh2:v:'+st.vid, st.data)) { // storage full: drop oldest videos
+    const L = lib(); while (L.length > 1) { const old = L.pop(); LS.del('sh2:v:'+old.vid); if (LS.set('sh2:v:'+st.vid, st.data)) break; }
+    LS.set('sh2:lib', L);
+  }
+  const L = lib().filter(x => x.vid !== st.vid);
+  L.unshift({vid:st.vid, title:st.data.title||'', n:st.S.length, lang:st.data.language_code||'', idx:st.idx, at:Date.now()});
+  LS.set('sh2:lib', L.slice(0, 60));
+}
+let saveT; function saveSoon(){ clearTimeout(saveT); saveT = setTimeout(saveVideo, 800); }
+
+function renderLib(){
+  const L = lib(), box = $('#lib');
+  if (!L.length){ box.innerHTML = '<div class="empty">ما فيه فيديوهات للحين. الفيديوهات اللي تفتحها تنحفظ هنا في جهازك.</div>'; return; }
+  box.innerHTML = L.map(x => `
+    <div class="item" data-v="${esc(x.vid)}">
+      <img loading="lazy" src="https://i.ytimg.com/vi/${esc(x.vid)}/mqdefault.jpg" alt="">
+      <div class="t"><b dir="auto">${esc(x.title || x.vid)}</b>
+        <span>${x.n} جملة${x.lang ? ' · '+esc(x.lang.toUpperCase()) : ''}${x.idx ? ' · وقفت عند '+(x.idx+1) : ''}</span></div>
+      <button class="del" data-del="${esc(x.vid)}" aria-label="حذف">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>`).join('');
+}
+$('#lib').addEventListener('click', e => {
+  const d = e.target.closest('[data-del]');
+  if (d){ e.stopPropagation(); const v=d.dataset.del; LS.set('sh2:lib', lib().filter(x=>x.vid!==v)); LS.del('sh2:v:'+v); renderLib(); toast('انحذف من القائمة'); return; }
+  const it = e.target.closest('.item'); if (it) location.hash = 'v=' + it.dataset.v;
+});
+
+/* ---------------- home ---------------- */
+function homeError(msg, detail){
+  const b = $('#homemsg'); b.innerHTML = esc(msg) + (detail ? `<small>${esc(detail)}</small>` : ''); b.classList.remove('hidden');
+}
+$('#form').addEventListener('submit', e => {
+  e.preventDefault(); $('#homemsg').classList.add('hidden');
+  const v = vidFrom($('#url').value);
+  if (!v){ homeError('الرابط مو واضح — الصق رابط فيديو يوتيوب كامل.'); return; }
+  $('#url').value = ''; $('#url').blur();
+  location.hash = 'v=' + v;
+});
+$('#paste').addEventListener('click', async () => {
+  try { const t = await navigator.clipboard.readText(); $('#url').value = t.trim(); if (vidFrom(t)) $('#form').requestSubmit(); }
+  catch(e){ $('#url').focus(); toast('اضغط مطوّل في الخانة واختر لصق'); }
+});
+
+/* ---------------- routing ---------------- */
+function route(){
+  const h = location.hash.replace(/^#/, '');
+  const m = h.match(/(?:^|&)v=([A-Za-z0-9_-]{11})/);
+  if (m) return openVideo(m[1]);
+  if (h === 'setup') return showSetup();
+  showHome();
+  const msg = h.match(/(?:^|&)msg=([^&]*)/);
+  if (msg){ let t; try { t = decodeURIComponent(msg[1]); } catch(e){ t = msg[1]; } homeError(t); }
+}
+function showHome(){
+  stopVideo();
+  $('#player').classList.add('hidden'); $('#setup').classList.add('hidden'); $('#home').classList.remove('hidden');
+  $('#homemsg').classList.add('hidden');
+  document.title = 'Shadowing'; renderLib();
+}
+function showSetup(){
+  stopVideo();
+  $('#player').classList.add('hidden'); $('#home').classList.add('hidden'); $('#setup').classList.remove('hidden');
+  document.title = 'إعداد الاختصار · Shadowing'; window.scrollTo(0, 0);
+}
+$('#setupBack').addEventListener('click', () => { location.hash = ''; });
+
+/* ---------------- iPhone Shortcut + computer bookmarklet ---------------- */
+// YouTube blocks this server, so the user's own phone/browser asks YouTube for the
+// video's player data and posts it to /api/ingest (see app.py).
+const ORIGIN = location.origin;
+const COPY = { req: ORIGIN + '/api/req?u=', yt: 'https://www.youtube.com/youtubei/v1/player', ingest: ORIGIN + '/api/ingest' };
+document.querySelectorAll('#setup .copy').forEach(box => {
+  const code = box.querySelector('code'); code.textContent = COPY[code.dataset.c];
+  box.querySelector('button').addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(code.textContent); toast('انسخ ✓', 1400); }
+    catch(e){ const r = document.createRange(); r.selectNodeContents(code); const s = getSelection(); s.removeAllRanges(); s.addRange(r); toast('محدد — اضغط نسخ', 2000); }
+  });
+});
+const BM = `(async()=>{const A='${ORIGIN}';try{const v=new URL(location.href).searchParams.get('v')||(location.pathname.match(/\\/(?:shorts|live|embed)\\/([\\w-]{11})/)||[])[1];if(!/youtube\\.com$/.test(location.hostname)||!v){alert('افتح فيديو في يوتيوب أول، وبعدين اضغط Shadowing');return}document.title='⏳ Shadowing';const b=await(await fetch(A+'/api/req?u='+v)).text();const p=await(await fetch('/youtubei/v1/player?prettyPrint=false',{method:'POST',body:b,credentials:'omit'})).text();location.href=await(await fetch(A+'/api/ingest',{method:'POST',body:p})).text()}catch(e){alert('Shadowing: '+e)}})()`;
+$('#bm').href = 'javascript:' + encodeURIComponent(BM);
+$('#bm').addEventListener('click', e => { e.preventDefault(); toast('اسحب الزر لشريط المفضلة، واضغطه وأنت في صفحة فيديو يوتيوب', 3500); });
+window.addEventListener('hashchange', route);
+$('#back').addEventListener('click', () => { if (history.length > 1 && st.cameFromHome) history.back(); else location.hash = ''; });
+
+/* ---------------- YouTube player ---------------- */
+let ytReady;
+function loadYT(){
+  if (ytReady) return ytReady;
+  ytReady = new Promise(res => {
+    if (window.YT && YT.Player) return res();
+    window.onYouTubeIframeAPIReady = () => res();
+    const s = document.createElement('script'); s.src = 'https://www.youtube.com/iframe_api'; document.head.appendChild(s);
+  });
+  return ytReady;
+}
+function stopVideo(){
+  clearPending(); st.trToken++;
+  if (st.player){ try{ saveVideo(); st.player.destroy(); }catch(e){} }
+  st.player = null; st.ready = false; st.vid = null; st.data = null; st.S = []; st.ccHidden = false;
+  $('#vwrap').innerHTML = '';
+}
+async function makePlayer(vid, startAt){
+  await loadYT();
+  if (st.vid !== vid) return;
+  $('#vwrap').innerHTML = '<div id="yt"></div>';
+  st.player = new YT.Player('yt', {
+    videoId: vid, width: '100%', height: '100%',
+    playerVars: { playsinline:1, rel:0, modestbranding:1, controls:1, iv_load_policy:3, cc_load_policy:0, start: Math.floor(startAt||0), origin: location.origin },
+    events: {
+      onReady: () => {
+        st.ready = true;
+        try { st.player.setPlaybackRate(settings.speed); } catch(e){}
+        hideCC();
+        try { const t = st.player.getVideoData().title; if (t && st.data && !st.data.title){ st.data.title = t; setHeader(); saveSoon(); } } catch(e){}
+      },
+      onStateChange: e => { setPlayIcon(e.data === 1 || e.data === 3); if (e.data === 1){ try{ st.player.setPlaybackRate(settings.speed); }catch(_){} if (!st.ccHidden){ st.ccHidden = true; hideCC(); } } },
+      onError: e => {
+        if (e.data === 101 || e.data === 150) toast('صاحب الفيديو مانع تشغيله خارج يوتيوب 😕', 6000);
+        else toast('الفيديو ما اشتغل (خطأ ' + e.data + ')', 5000);
+      }
+    }
+  });
+}
+function hideCC(){ try{ st.player.unloadModule('captions'); st.player.unloadModule('cc'); }catch(e){} } // the text is already on the cards
+function setPlayIcon(playing){ $('#icoPlay').classList.toggle('hidden', playing); $('#icoPause').classList.toggle('hidden', !playing); }
+function isPlaying(){ try{ const s = st.player.getPlayerState(); return s === 1 || s === 3; }catch(e){ return false; } }
+
+/* ---------------- open a video ---------------- */
+async function openVideo(vid, opts={}){
+  if (st.vid === vid && !opts.fresh && st.data) return;
+  const fromHome = !$('#home').classList.contains('hidden');
+  stopVideo();
+  st.cameFromHome = fromHome;
+  st.vid = vid;
+  $('#home').classList.add('hidden'); $('#setup').classList.add('hidden'); $('#player').classList.remove('hidden');
+  const cached = !opts.fresh && LS.get('sh2:v:'+vid, null);
+  st.data = cached || {video_id: vid};
+  setHeader();
+  if (cached && cached.sentences && cached.sentences.length){
+    useData(cached);
+    makePlayer(vid, (st.S[st.idx]||{}).start || 0);
+    return;
+  }
+  makePlayer(vid, 0);
+  $('#list').innerHTML = '<div class="state rtl"><div class="spin"></div>أجيب نص الفيديو وأقسّمه لجمل…</div>';
+  try {
+    const q = new URLSearchParams({url: vid}); if (opts.lang) q.set('lang', opts.lang); if (opts.fresh) q.set('fresh', '1');
+    const r = await fetch(API + '/api/transcript?' + q);
+    let j = await r.json().catch(() => ({error:'error', message:'السيرفر رجّع رد غير مفهوم (' + r.status + ')'}));
+    if (st.vid !== vid) return;
+    if (!r.ok || j.error) throw j;
+    if (j.need_captions){ // YouTube blocks the server, so this device downloads the caption file itself
+      const cr = await fetch(j.url);
+      const cap = cr.ok ? await cr.text() : '';
+      if (st.vid !== vid) return;
+      if (!cap.trim()) throw {error:'error', message:'يوتيوب ما أعطى ملف الترجمة. افتح الفيديو من المشاركة ← Shadowing مرة ثانية.'};
+      const sr = await fetch(API + '/api/split', {method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({video_id: vid, lang: opts.lang || '', captions: cap, meta: j.meta})});
+      j = await sr.json().catch(() => ({error:'error', message:'السيرفر رجّع رد غير مفهوم (' + sr.status + ')'}));
+      if (st.vid !== vid) return;
+      if (!sr.ok || j.error) throw j;
+    }
+    if (cached && cached.title && !j.title) j.title = cached.title;
+    if (st.data.title && !j.title) j.title = st.data.title;
+    useData(j);
+    saveVideo();
+  } catch(err){
+    if (st.vid !== vid) return;
+    const msg = (err && err.message) || 'ما قدرت أوصل للسيرفر. تأكد من النت وجرّب مرة ثانية.';
+    const needSetup = !!err && (err.error === 'no_key' || err.error === 'blocked');
+    const det = needSetup ? '' : ((err && err.detail) || (err instanceof Error ? err.message : '')).slice(0, 300);
+    $('#list').innerHTML = `<div class="state rtl">${esc(msg)}${det ? `<div style="direction:ltr;font-size:11px;margin-top:10px;word-break:break-word">${esc(det)}</div>` : ''}
+      <div class="btns">${needSetup ? '<a class="pill primary" href="#setup" style="text-decoration:none">طريقة الإعداد</a>' : '<button class="pill primary" id="retry">حاول مرة ثانية</button>'}<button class="pill" id="goback">رجوع</button></div></div>`;
+    if ($('#retry')) $('#retry').onclick = () => openVideo(vid, {fresh:true});
+    $('#goback').onclick = () => { location.hash = ''; };
+  }
+}
+function setHeader(){
+  const d = st.data || {};
+  $('#ttl').textContent = d.title || 'Shadowing';
+  document.title = d.title ? d.title + ' · Shadowing' : 'Shadowing';
+  $('#sub').textContent = st.S.length ? `${st.S.length} جملة · ${(d.language_code||'').toUpperCase()}` : ' ';
+}
+function useData(d){
+  if (d.trv !== TR_VER){ d.tr = {}; d.trv = TR_VER; }
+  st.data = d; st.S = d.sentences || [];
+  st.idx = Math.min(Math.max(0, d.idx||0), Math.max(0, st.S.length-1)); st.reps = 0;
+  setHeader(); renderList(); setIdx(st.idx, {scroll:true, instant:true});
+  ensureTranslations();
+}
+
+/* ---------------- sentence list ---------------- */
+function renderList(){
+  const tr = currentTr();
+  $('#list').innerHTML = st.S.map((s, i) => `
+    <div class="card" data-i="${i}">
+      <div class="row"><span class="ts">${fmt(s.start)}</span><span class="reps"></span>
+        <button class="say" data-say="${i}" aria-label="إعادة الجملة">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M11 5L6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.4 5.6a9 9 0 0 1 0 12.8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button></div>
+      <div class="txt" dir="auto">${esc(s.text)}</div>
+      <div class="tr">${tr && tr[i] ? esc(tr[i]) : ''}</div>
+      <div class="waitnote">اضغط ▶ أو الجملة عشان تكمل</div>
+      <div class="prog"></div>
+    </div>`).join('');
+  st.cards = Array.from(document.querySelectorAll('#list .card'));
+}
+$('#list').addEventListener('click', e => {
+  const say = e.target.closest('[data-say]');
+  const card = e.target.closest('.card'); if (!card) return;
+  const i = +card.dataset.i;
+  if (!say && st.pending && i === st.idx && $('#list .card.wait.tap')) { runPending(); return; }
+  clearPending(); st.reps = 0; setIdx(i); seekPlay(i);
+});
+['touchstart','wheel','mousedown'].forEach(ev => $('#list').addEventListener(ev, () => { st.userScrollAt = Date.now(); }, {passive:true}));
+
+function setIdx(i, o={}){
+  if (!st.S.length) return;
+  i = Math.max(0, Math.min(st.S.length-1, i));
+  const prev = st.cards[st.idx]; if (prev){ prev.classList.remove('on','wait','tap'); const p = prev.querySelector('.prog'); p.style.transition='none'; p.style.width='0'; }
+  st.idx = i;
+  const c = st.cards[i]; if (!c) return;
+  c.classList.add('on'); updateReps();
+  if (o.scroll || Date.now() - st.userScrollAt > 2500){
+    c.scrollIntoView({block: o.instant ? 'start' : 'center', behavior: o.instant ? 'auto' : 'smooth'});
+  }
+  saveSoon();
+}
+function updateReps(){
+  document.body.classList.toggle('loopmode', settings.loop);
+  const c = st.cards[st.idx]; if (!c) return;
+  c.querySelector('.reps').textContent = '↻ ' + (st.reps + 1) + (settings.reps ? ' / ' + settings.reps : '');
+}
+function findIdx(t){ // the sentence playing at t, or the next one if t is in a pause
+  const S = st.S; let lo = 0, hi = S.length - 1, ans = S.length - 1;
+  while (lo <= hi){ const m = (lo+hi) >> 1; if (S[m].end > t){ ans = m; hi = m - 1; } else lo = m + 1; }
+  return ans;
+}
+
+/* ---------------- playback engine ---------------- */
+function seekPlay(i){
+  if (!st.ready || !st.S[i]) return;
+  const target = Math.max(0, st.S[i].start - 0.12);
+  try { st.player.seekTo(target, true); st.player.playVideo(); } catch(e){}
+  st.seekTarget = target; st.seekAt = performance.now(); st.seekDeadline = st.seekAt + 1600;
+  hintIfStuck();
+}
+function hintIfStuck(){
+  if (st.hinted) return;
+  setTimeout(() => {
+    if (!st.player || st.pending || isPlaying() || st.hinted) return;
+    st.hinted = true; toast('إذا ما اشتغل الفيديو، اضغط عليه مرة وحدة بنفسك (أول مرة بس)', 5000);
+  }, 2200);
+}
+function clearPending(){
+  clearTimeout(st.gapTimer); st.gapTimer = null; st.pending = null;
+  const c = st.cards[st.idx]; if (c) c.classList.remove('wait','tap');
+}
+function runPending(){ const f = st.pending; clearPending(); if (f) f(); }
+function afterGap(fn){
+  const s = st.S[st.idx];
+  let ms = 0;
+  if (settings.gap === 'tap') ms = Infinity;
+  else if (settings.gap === 'len') ms = (s.end - s.start) * 1000 / (settings.speed || 1) + 400;
+  else ms = (+settings.gap || 0) * 1000;
+  if (!ms){ fn(); return; }
+  try { st.player.pauseVideo(); } catch(e){}
+  st.pending = fn;
+  const c = st.cards[st.idx];
+  if (c){
+    c.classList.add('wait'); c.classList.toggle('tap', ms === Infinity);
+    const p = c.querySelector('.prog');
+    if (ms !== Infinity){ p.style.transition = 'none'; p.style.width = '100%'; void p.offsetWidth; p.style.transition = `width ${ms}ms linear`; p.style.width = '0'; }
+  }
+  if (ms !== Infinity) st.gapTimer = setTimeout(runPending, ms);
+}
+function onEnd(){
+  const S = st.S, i = st.idx;
+  if (settings.loop){
+    st.reps++;
+    if (settings.reps && st.reps >= settings.reps){
+      st.reps = 0;
+      if (i >= S.length - 1){ try{ st.player.pauseVideo(); }catch(e){} updateReps(); return; }
+      afterGap(() => { setIdx(i + 1); seekPlay(i + 1); });
+    } else {
+      updateReps();
+      afterGap(() => seekPlay(i));
+    }
+  } else {
+    if (i >= S.length - 1) return;
+    if (settings.gap !== '0') afterGap(() => { setIdx(i + 1); seekPlay(i + 1); });
+    else setIdx(i + 1);
+  }
+}
+function tick(){
+  if (!st.ready || !st.player || !st.S.length || !st.player.getPlayerState) return;
+  let ps, t;
+  try { ps = st.player.getPlayerState(); t = st.player.getCurrentTime(); } catch(e){ return; }
+  const s = st.S[st.idx];
+  const c = st.cards[st.idx];
+  if (c && !st.pending){
+    const pct = Math.max(0, Math.min(1, (t - s.start) / Math.max(0.2, s.end - s.start)));
+    const p = c.querySelector('.prog'); p.style.transition = 'none'; p.style.width = (pct*100).toFixed(1) + '%';
+  }
+  if (ps !== 1 || st.pending) return;
+  if (st.seekTarget != null){
+    const settled = performance.now() - st.seekAt > 250 && Math.abs(t - st.seekTarget) < 0.9;
+    if (settled || performance.now() > st.seekDeadline) st.seekTarget = null; else return;
+  }
+  if (t < s.start - 0.7 || t > s.end + 0.7){ // user scrubbed the video
+    const j = findIdx(t);
+    if (j !== st.idx){ st.reps = 0; setIdx(j); return; }
+  }
+  if (t >= s.end - 0.04) onEnd();
+}
+setInterval(tick, 50);
+
+function togglePlay(){
+  if (!st.player || !st.ready){ return; }
+  if (st.pending){ runPending(); return; }
+  if (isPlaying()){ st.player.pauseVideo(); return; }
+  const t = st.player.getCurrentTime(), s = st.S[st.idx];
+  if (s && (t < s.start - 0.7 || t >= s.end - 0.05)) seekPlay(st.idx);
+  else { st.player.playVideo(); hintIfStuck(); }
+}
+function jump(d){ if (!st.S.length) return; clearPending(); st.reps = 0; const i = Math.max(0, Math.min(st.S.length-1, st.idx + d)); setIdx(i, {scroll:true}); seekPlay(i); }
+function setLoopBtn(){ $('#loop').classList.toggle('on', !!settings.loop); updateReps(); }
+$('#play').addEventListener('click', togglePlay);
+$('#prev').addEventListener('click', () => jump(-1));
+$('#next').addEventListener('click', () => jump(1));
+$('#loop').addEventListener('click', () => {
+  settings.loop = !settings.loop; saveSettings(); st.reps = 0; setLoopBtn();
+  toast(settings.loop ? 'التكرار شغّال: الجملة الحالية بتتكرر' : 'التكرار طافي', 1600);
+});
+document.addEventListener('keydown', e => {
+  if ($('#player').classList.contains('hidden') || /input|select|textarea/i.test(e.target.tagName)) return;
+  if (e.code === 'Space'){ e.preventDefault(); togglePlay(); }
+  else if (e.key === 'ArrowRight' || e.key === 'ArrowDown'){ e.preventDefault(); jump(1); }
+  else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp'){ e.preventDefault(); jump(-1); }
+  else if (e.key === 'r' || e.key === 'R'){ $('#loop').click(); }
+});
+
+/* ---------------- translation ---------------- */
+// Fillers like "eh", "oh" push Google's Arabic into Egyptian dialect; removed from the text sent only.
+const FILLERS = /[,;]?\s*\b(e+h+|e+hm+|a+h+|o+h+|u+h+|u+hm+|m+h+|beh|mah|ahah\w*)\b(?=[\s,.!?;:…]|$)/gi;
+function stripFillers(s){
+  const c = s.replace(FILLERS, '').replace(/^[\s,;.…]+/, '').replace(/(^|["«“(])\s*[,;]\s*/g, '$1')
+    .replace(/\s+([,.!?;:])/g, '$1').replace(/,(\s*[.!?])/g, '$1').replace(/\s{2,}/g, ' ').trim();
+  return /\p{L}/u.test(c) ? c : s;
+}
+async function directTranslate(texts, sl, tl){
+  const src = texts.map(t => tl === 'ar' ? stripFillers(t) : t);
+  const r = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${encodeURIComponent(sl || 'auto')}&tl=${encodeURIComponent(tl)}&dt=t`,
+    {method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body: 'q=' + encodeURIComponent(src.join('\n'))});
+  const j = await r.json();
+  const lines = (j[0] || []).map(p => p[0] || '').join('').split('\n');
+  return lines.length === texts.length ? lines.map(s => s.trim()) : [];
+}
+function currentTr(){ const l = settings.tr; if (l === 'off' || !st.data) return null; return (st.data.tr || {})[l] || null; }
+async function ensureTranslations(){
+  const lang = settings.tr, S = st.S;
+  document.querySelectorAll('#list .tr').forEach((el, i) => { const tr = currentTr(); el.textContent = tr && tr[i] ? tr[i] : ''; });
+  if (lang === 'off' || !S.length || base(st.data.language_code) === lang) return;
+  st.data.tr = st.data.tr || {};
+  const arr = st.data.tr[lang] = st.data.tr[lang] || new Array(S.length).fill(null);
+  const token = ++st.trToken, vid = st.vid, CH = 50;
+  const starts = []; const first = Math.floor(st.idx / CH) * CH;
+  for (let a = first; a < S.length; a += CH) starts.push(a);
+  for (let a = 0; a < first; a += CH) starts.push(a);
+  let failed = 0;
+  for (const a of starts){
+    const idxs = []; for (let i = a; i < Math.min(S.length, a + CH); i++) if (!arr[i]) idxs.push(i);
+    if (!idxs.length) continue;
+    const put = (i, t) => { arr[i] = t; const el = st.cards[i] && st.cards[i].querySelector('.tr'); if (el) el.textContent = t; };
+    try {
+      const r = await fetch(API + '/api/translate', {method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({texts: idxs.map(i => S[i].text), target: lang, source: st.data.language_code || 'auto'})});
+      const j = await r.json();
+      if (token !== st.trToken || vid !== st.vid) return;
+      (j.translations || []).forEach((t, k) => { if (t) put(idxs[k], t); });
+    } catch(e){ if (token !== st.trToken) return; }
+    const miss = idxs.filter(i => !arr[i]);
+    if (miss.length){ // backup if the server can't translate: this device asks Google Translate directly
+      try { (await directTranslate(miss.map(i => S[i].text), base(st.data.language_code), lang)).forEach((t, k) => { if (t) put(miss[k], t); }); } catch(e){}
+      if (token !== st.trToken || vid !== st.vid) return;
+      failed += miss.filter(i => !arr[i]).length;
+    }
+  }
+  if (failed) toast('بعض الجمل ما انترجمت. افتح الإعدادات واضغط على اللغة مرة ثانية لإعادة المحاولة.', 4500);
+  saveSoon();
+}
+
+/* ---------------- settings sheet ---------------- */
+function buildSheet(){
+  document.querySelectorAll('#sheet .seg[data-key]').forEach(seg => {
+    const key = seg.dataset.key;
+    seg.innerHTML = OPTIONS[key].map(([v, l]) => `<button type="button" data-v="${v}" class="${String(settings[key]) === String(v) ? 'sel' : ''}">${l}</button>`).join('');
+  });
+  const d = st.data || {}, tracks = d.tracks || [];
+  const sel = $('#track');
+  sel.innerHTML = tracks.map(t => `<option value="${esc(t.code)}" ${base(t.code) === base(d.language_code) && (!!t.generated === !!d.is_generated) ? 'selected' : ''}>${esc(t.name || t.code)}${t.generated ? ' (تلقائي)' : ''}</option>`).join('');
+  sel.parentElement.querySelector('select').classList.toggle('hidden', tracks.length < 2);
+  $('#trackinfo').textContent = d.sentences ? `${d.is_generated === true ? 'ترجمة يوتيوب التلقائية' : d.is_generated === false ? 'ترجمة مكتوبة من صاحب القناة' : 'ترجمة يوتيوب'}${d.punctuated === false ? ' — بدون علامات ترقيم، فالتقسيم حسب الوقفات بالكلام' : ''}.` : '';
+}
+function applyFont(){ document.documentElement.style.setProperty('--font', FONT[settings.font] || '20px'); }
+$('#gear').addEventListener('click', () => { buildSheet(); $('#sheet').classList.remove('hidden'); $('#sheetbg').classList.remove('hidden'); });
+$('#sheetbg').addEventListener('click', () => { $('#sheet').classList.add('hidden'); $('#sheetbg').classList.add('hidden'); });
+$('#sheet').addEventListener('click', e => {
+  const b = e.target.closest('.seg[data-key] button'); if (!b) return;
+  const key = b.parentElement.dataset.key; let v = b.dataset.v;
+  if (key === 'speed' || key === 'reps') v = +v;
+  settings[key] = v; saveSettings(); buildSheet();
+  if (key === 'speed' && st.player) try{ st.player.setPlaybackRate(v); }catch(e){}
+  if (key === 'font') applyFont();
+  if (key === 'reps'){ st.reps = 0; updateReps(); }
+  if (key === 'tr') ensureTranslations();
+  if (key === 'gap' && st.pending && v === '0') runPending();
+});
+$('#track').addEventListener('change', e => { closeSheet(); openVideo(st.vid, {fresh:true, lang:e.target.value}); });
+$('#refetch').addEventListener('click', () => { const v = st.vid; closeSheet(); if (v) openVideo(v, {fresh:true, lang: st.data && st.data.language_code}); });
+function closeSheet(){ $('#sheet').classList.add('hidden'); $('#sheetbg').classList.add('hidden'); }
+
+/* ---------------- start ---------------- */
+applyFont(); setLoopBtn();
+document.addEventListener('visibilitychange', () => { if (document.hidden) saveVideo(); });
+window.addEventListener('pagehide', saveVideo);
+(function boot(){
+  const q = new URLSearchParams(location.search);
+  const v = vidFrom(q.get('v') || q.get('url') || '');
+  if (v && !location.hash) { history.replaceState(null, '', location.pathname + '#v=' + v); }
+  route();
+})();
+})();
+</script>
+</body>
+</html>

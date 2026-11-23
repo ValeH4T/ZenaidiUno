@@ -56,11 +56,17 @@ svg{display:block}
 /* ---------- setup ---------- */
 #setup{max-width:680px;margin:0 auto;padding:calc(10px + var(--sat)) 16px calc(40px + var(--sab))}
 #setup .top{display:flex;align-items:center;gap:8px;margin-bottom:6px}
-#setup .top b{font-size:19px}
+#setup .top b{font-size:19px;flex:1;min-width:0;line-height:1.3}
 #setup h4{margin:22px 0 6px;font-size:16px}
 #setup .lead{line-height:1.8;font-size:15.5px;color:#3d3a35;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px}
 #setup ol{padding-inline-start:24px;line-height:1.9;font-size:15.5px;margin:6px 0}
 #setup li{margin-bottom:12px}
+.langsw{display:flex;gap:2px;margin-inline-start:auto;direction:ltr;background:var(--btn);border-radius:999px;padding:3px;flex:none}
+.langsw button{min-width:38px;height:32px;padding:0 8px;border-radius:999px;font-size:13.5px;font-weight:700;color:var(--muted);letter-spacing:.3px}
+.langsw button.sel{background:var(--accent);color:#fff}
+.getsc{background:#fff;border:1.5px solid var(--accent-line);border-radius:14px;padding:14px 16px;margin-top:14px;line-height:1.7;font-size:15.5px}
+.getsc p{margin:4px 0 12px;color:#4a463f}
+.getsc .pill{display:inline-block;font-weight:600;font-size:16px;padding:12px 20px}
 .copy{display:flex;gap:6px;align-items:center;margin:6px 0;direction:ltr}
 .copy code{flex:1;min-width:0;background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:8px 10px;font-size:12.5px;word-break:break-all;line-height:1.4}
 .copy button{flex:none;padding:8px 12px;border-radius:10px;background:var(--accent);color:#fff;font-size:14px}
@@ -164,6 +170,7 @@ header .sub{font-size:13px;color:var(--muted);margin-top:2px}
   <div class="brand">
     <div class="logo"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
     <h1>Shadowing</h1>
+    <div class="langsw" role="group" aria-label="Language"><button type="button" data-l="ar">AR</button><button type="button" data-l="it">IT</button><button type="button" data-l="en">EN</button></div>
   </div>
   <p class="tag" data-t="tag"></p>
   <form id="form" autocomplete="off">
@@ -196,15 +203,15 @@ header .sub{font-size:13px;color:var(--muted);margin-top:2px}
   <div class="top">
     <button class="hbtn" id="setupBack" data-ta="back"><svg class="flipx" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
     <b data-t="setupTitle"></b>
+    <div class="langsw" role="group" aria-label="Language"><button type="button" data-l="ar">AR</button><button type="button" data-l="it">IT</button><button type="button" data-l="en">EN</button></div>
   </div>
   <p class="lead" data-t="setupLead"></p>
-  <h4 data-t="haveShortcut"></h4>
-  <ol>
-    <li data-t="dup1"></li>
-    <li data-t="dup2"></li>
-    <li><span data-t="dup3"></span><div class="copy"><code data-c="ingest"></code><button type="button" data-t="copy"></button></div></li>
-  </ol>
-  <h4 data-t="newShortcut"></h4>
+  <div id="quick" class="getsc hidden">
+    <b data-t="quickTitle"></b>
+    <p data-t="quickHow"></p>
+    <a class="pill primary" id="getsc" href="#" data-t="quickBtn"></a>
+  </div>
+  <h4 id="buildH" data-t="buildTitle"></h4>
   <ol>
     <li data-t="s1"></li>
     <li><span data-t="s2"></span><div class="copy"><code data-c="req"></code><button type="button" data-t="copy"></button></div><span data-t="s2b"></span></li>
@@ -289,6 +296,8 @@ const ON_SPACE = /\.hf\.space$/.test(location.hostname);
 const API = ON_SPACE ? '' : 'https://zenaidiuno-shadowing-v2.hf.space';
 const PAGE_ID = ON_SPACE ? 'v3' : 'gh';
 const INGEST_URL = (API || location.origin) + '/api/ingest?to=' + PAGE_ID;
+// iCloud link of a ready-made Shadowing 3 shortcut (shared from the Shortcuts app). Empty = only the build-it-yourself steps.
+const SHORTCUT_LINK = '';
 
 /* ================= storage ================= */
 const LS = {
@@ -327,16 +336,15 @@ ar: {
   playPause:'تشغيل / إيقاف', prev:'الجملة السابقة', next:'الجملة التالية', loopBtn:'تكرار الجملة', rangeBtn:'تكرار مجموعة جمل', micBtn:'اختبر نطقك', sayBtn:'إعادة الجملة',
   setupTitle:'إعداد اختصار الآيفون',
   setupLead:'تسويه مرة وحدة بس. بعدها من أي فيديو في يوتيوب تضغط «مشاركة» ثم «Shadowing 3»، ويفتح الدرس في هذه الصفحة. الاختصار يستخدم نت جوالك، فيوتيوب ما يحجبه.',
-  haveShortcut:'إذا عندك اختصار Shadowing من قبل:', dup1:'افتح تطبيق «الاختصارات» (Shortcuts).',
-  dup2:'اضغط مطوّلاً على اختصار Shadowing، واختر «تكرار» (Duplicate)، وسمّ النسخة الجديدة Shadowing 3.',
-  dup3:'افتح Shadowing 3، واضغط على رابط ثالث إجراء (اللي آخره ingest)، وروح لآخر الرابط وأضف \u200e?to=gh\u200e. لازم يصير الرابط كذا:',
-  newShortcut:'إذا ما عندك اختصار:', s1:'افتح تطبيق «الاختصارات» (Shortcuts)، واضغط +، وسمّ الاختصار Shadowing 3.',
-  s2:'أضف إجراء «الحصول على محتويات URL» (Get Contents of URL). امسح الرابط اللي فيه والصق:', s2b:'وبعد آخر حرف مباشرة اختر المتغير «مدخلات الاختصار» (Shortcut Input).',
+  quickTitle:'الطريقة الأسهل (دقيقة وحدة):', quickHow:'اضغط الزر تحت، وبعدها اضغط «إضافة اختصار». بس كذا.', quickBtn:'أضف اختصار Shadowing 3',
+  buildTitle:'خطوات الإعداد (تقريباً 5 دقايق):', buildOr:'أو سوّه بنفسك (تقريباً 5 دقايق):',
+  s1:'افتح تطبيق «الاختصارات» (Shortcuts)، واضغط + فوق، وسمّ الاختصار Shadowing 3.',
+  s2:'أضف إجراء «الحصول على محتويات URL» (Get Contents of URL). اضغط على خانة الرابط والصق:', s2b:'وبعد آخر حرف مباشرة اختر المتغير «مدخلات الاختصار» (Shortcut Input).',
   s3:'أضف «الحصول على محتويات URL» ثاني، والرابط:', s3b:'اضغط «إظهار المزيد»، واختر الطريقة POST، ونص الطلب «ملف» (File)، والملف «محتويات URL» (نتيجة الخطوة 2).',
   s4:'أضف «الحصول على محتويات URL» ثالث، والرابط:', s4b:'الطريقة POST، ونص الطلب «ملف»، والملف «محتويات URL» (نتيجة الخطوة 3).',
   s5:'أضف إجراء «فتح عناوين URL» (Open URLs)، واختر «محتويات URL» (نتيجة الخطوة 4).',
   s6:'من زر ⓘ تحت (تفاصيل الاختصار) فعّل «إظهار في ورقة المشاركة» (Show in Share Sheet).',
-  useTitle:'الاستخدام:', u1:'افتح الفيديو في تطبيق يوتيوب.', u2:'اضغط «مشاركة».', u3:'اضغط «المزيد» واختر Shadowing 3.', u4:'أول مرة بيسألك عن السماح بالاتصال، اختر «السماح دائماً».'
+  useTitle:'الاستخدام:', u1:'افتح الفيديو في تطبيق يوتيوب.', u2:'اضغط «مشاركة».', u3:'اضغط «المزيد» واختر Shadowing 3.', u4:'أول مرة بيسألك أكثر من مرة عن السماح بالاتصال. اختر «السماح دائماً» كل مرة.'
 },
 en: {
   tag:'Paste a YouTube link and practise it sentence by sentence.', start:'Start', paste:'Paste', yourVideos:'Your videos',
@@ -365,22 +373,21 @@ en: {
   playPause:'Play / pause', prev:'Previous sentence', next:'Next sentence', loopBtn:'Repeat sentence', rangeBtn:'Repeat a group of sentences', micBtn:'Test your pronunciation', sayBtn:'Replay sentence',
   setupTitle:'iPhone shortcut setup',
   setupLead:'You do this once. Then from any YouTube video tap “Share”, then “Shadowing 3”, and the lesson opens on this page. The shortcut uses your phone’s internet, so YouTube doesn’t block it.',
-  haveShortcut:'If you already have the Shadowing shortcut:', dup1:'Open the Shortcuts app.',
-  dup2:'Long-press the Shadowing shortcut, choose Duplicate, and name the copy Shadowing 3.',
-  dup3:'Open Shadowing 3, tap the address of the third action (the one ending in ingest), go to its end and add ?to=gh. It must read:',
-  newShortcut:'If you don’t have a shortcut yet:', s1:'Open the Shortcuts app, tap +, and name it Shadowing 3.',
-  s2:'Add the “Get Contents of URL” action. Delete its address and paste:', s2b:'Right after the last character, insert the variable “Shortcut Input”.',
+  quickTitle:'Easiest way (one minute):', quickHow:'Tap the button below, then “Add Shortcut”. That’s it.', quickBtn:'Add the Shadowing 3 shortcut',
+  buildTitle:'Setup steps (about 5 minutes):', buildOr:'Or build it yourself (about 5 minutes):',
+  s1:'Open the Shortcuts app, tap + at the top, and name the shortcut Shadowing 3.',
+  s2:'Add the “Get Contents of URL” action. Tap its URL field and paste:', s2b:'Right after the last character, insert the variable “Shortcut Input”.',
   s3:'Add a second “Get Contents of URL” with the address:', s3b:'Tap “Show More”: Method POST, Request Body “File”, and the file “Contents of URL” (the result of step 2).',
   s4:'Add a third “Get Contents of URL” with the address:', s4b:'Method POST, Request Body “File”, file “Contents of URL” (the result of step 3).',
   s5:'Add the “Open URLs” action and choose “Contents of URL” (the result of step 4).',
   s6:'From the ⓘ button (shortcut details) turn on “Show in Share Sheet”.',
-  useTitle:'How to use it:', u1:'Open the video in the YouTube app.', u2:'Tap “Share”.', u3:'Tap “More” and choose Shadowing 3.', u4:'The first time it asks to allow the connection, choose “Always Allow”.'
+  useTitle:'How to use it:', u1:'Open the video in the YouTube app.', u2:'Tap “Share”.', u3:'Tap “More” and choose Shadowing 3.', u4:'The first time it asks a few times to allow the connection. Choose “Always Allow” each time.'
 },
 it: {
   tag:'Incolla un link di YouTube ed esercitati frase per frase.', start:'Inizia', paste:'Incolla', yourVideos:'I tuoi video',
   noVideos:'Ancora nessun video. I video che apri vengono salvati su questo dispositivo.',
   howNew:'Come aprire un nuovo video', fromIphone:'📱 Da iPhone', iphoneHow:'Nell’app YouTube tocca «Condividi», poi «Shadowing 3». La lezione si apre qui.',
-  setupBtn:'Configura la scorciatoia (una volta)', fromComputer:'💻 Dal computer',
+  setupBtn:'Configura il comando rapido (una volta)', fromComputer:'💻 Dal computer',
   bmHow:'Trascina questo pulsante nella barra dei preferiti, poi cliccalo mentre guardi un video su YouTube:',
   dragHint:'Trascina il pulsante nella barra dei preferiti e cliccalo su una pagina video di YouTube', badUrl:'Il link non è chiaro. Incolla il link completo di un video YouTube.',
   pasteHint:'Tieni premuto nel campo e scegli Incolla', deleted:'Rimosso dall’elenco', sentences:'frasi', stoppedAt:'fermo alla',
@@ -401,18 +408,17 @@ it: {
   micNothing:'Non ho sentito niente. Tocca il microfono e di’ la frase chiaramente.', speakNow:'Parla ora…', micErr:'Il microfono non è partito ({e}). Toccalo di nuovo.', heard:'Ho sentito', correct:'Giusto', full:'🎉 Bravo! Hai finito tutto il video: 100/100',
   copy:'Copia', copied:'Copiato ✓', selected:'Selezionato. Tocca Copia',
   playPause:'Play / pausa', prev:'Frase precedente', next:'Frase successiva', loopBtn:'Ripeti la frase', rangeBtn:'Ripeti un gruppo di frasi', micBtn:'Prova la pronuncia', sayBtn:'Riascolta la frase',
-  setupTitle:'Scorciatoia per iPhone',
-  setupLead:'Lo fai una volta sola. Poi da qualsiasi video di YouTube tocchi «Condividi» e «Shadowing 3», e la lezione si apre in questa pagina. La scorciatoia usa la connessione del telefono, quindi YouTube non la blocca.',
-  haveShortcut:'Se hai già la scorciatoia Shadowing:', dup1:'Apri l’app Comandi (Shortcuts).',
-  dup2:'Tieni premuto su Shadowing, scegli «Duplica» e chiama la copia Shadowing 3.',
-  dup3:'Apri Shadowing 3, tocca l’indirizzo della terza azione (quello che finisce con ingest), vai alla fine e aggiungi ?to=gh. Deve diventare:',
-  newShortcut:'Se non hai ancora una scorciatoia:', s1:'Apri l’app Comandi, tocca + e chiamala Shadowing 3.',
-  s2:'Aggiungi l’azione «Ottieni contenuti dell’URL». Cancella l’indirizzo e incolla:', s2b:'Subito dopo l’ultimo carattere inserisci la variabile «Input comando rapido».',
+  setupTitle:'Comando rapido per iPhone',
+  setupLead:'Lo fai una volta sola. Poi da qualsiasi video di YouTube tocchi «Condividi» e «Shadowing 3», e la lezione si apre in questa pagina. Il comando usa la connessione del telefono, quindi YouTube non lo blocca.',
+  quickTitle:'Il modo più facile (un minuto):', quickHow:'Tocca il pulsante qui sotto, poi «Aggiungi comando rapido». Fatto.', quickBtn:'Aggiungi il comando Shadowing 3',
+  buildTitle:'Passaggi (circa 5 minuti):', buildOr:'Oppure crealo tu (circa 5 minuti):',
+  s1:'Apri l’app Comandi Rapidi, tocca + in alto e chiama il comando Shadowing 3.',
+  s2:'Aggiungi l’azione «Ottieni contenuti dell’URL». Tocca il campo URL e incolla:', s2b:'Subito dopo l’ultimo carattere inserisci la variabile «Input comando rapido».',
   s3:'Aggiungi una seconda «Ottieni contenuti dell’URL» con l’indirizzo:', s3b:'Tocca «Mostra di più»: Metodo POST, Corpo della richiesta «File», file «Contenuti dell’URL» (risultato del passo 2).',
   s4:'Aggiungi una terza «Ottieni contenuti dell’URL» con l’indirizzo:', s4b:'Metodo POST, Corpo «File», file «Contenuti dell’URL» (risultato del passo 3).',
   s5:'Aggiungi l’azione «Apri URL» e scegli «Contenuti dell’URL» (risultato del passo 4).',
   s6:'Dal pulsante ⓘ (dettagli) attiva «Mostra nel foglio di condivisione».',
-  useTitle:'Come si usa:', u1:'Apri il video nell’app YouTube.', u2:'Tocca «Condividi».', u3:'Tocca «Altro» e scegli Shadowing 3.', u4:'La prima volta chiede il permesso di connessione: scegli «Consenti sempre».'
+  useTitle:'Come si usa:', u1:'Apri il video nell’app YouTube.', u2:'Tocca «Condividi».', u3:'Tocca «Altro» e scegli Shadowing 3.', u4:'La prima volta chiede alcune volte il permesso di connessione: scegli «Consenti sempre» ogni volta.'
 }};
 const UI_LANGS = [['auto', null], ['ar','العربية'], ['en','English'], ['it','Italiano']];
 const settings = Object.assign({speed:1, reps:0, gap:'0', tr:null, font:'m', loop:false, ui:'auto'}, LS.get(P+'settings', {}));
@@ -428,6 +434,7 @@ function applyLang(){
   document.querySelectorAll('[data-t]').forEach(el => { el.textContent = t(el.dataset.t); });
   document.querySelectorAll('[data-ta]').forEach(el => { el.setAttribute('aria-label', t(el.dataset.ta)); el.title = t(el.dataset.ta); });
   document.querySelectorAll('svg.flipx').forEach(s => { s.style.transform = rtl ? 'scaleX(-1)' : ''; });
+  document.querySelectorAll('.langsw button').forEach(b => b.classList.toggle('sel', b.dataset.l === L));
 }
 // translation language: the device language by default (English if the device speaks the video's language)
 function trLang(){ if (settings.tr) return settings.tr; const vl = st.data ? base(st.data.language_code) : ''; return DEVICE && DEVICE !== vl ? DEVICE : (vl === 'en' ? 'ar' : 'en'); }
@@ -700,6 +707,15 @@ $('#setupBack').addEventListener('click', () => { location.hash = ''; });
 
 /* ================= iPhone Shortcut + computer bookmarklet ================= */
 // YouTube blocks the server, so the phone/browser asks YouTube for the video's data and posts it to /api/ingest.
+if (/^https:\/\/www\.icloud\.com\/shortcuts\//.test(SHORTCUT_LINK)){
+  $('#getsc').href = SHORTCUT_LINK; $('#quick').classList.remove('hidden'); $('#buildH').dataset.t = 'buildOr';
+}
+document.querySelectorAll('.langsw').forEach(sw => sw.addEventListener('click', e => {
+  const b = e.target.closest('button[data-l]'); if (!b) return;
+  settings.ui = b.dataset.l; saveSettings(); applyLang();
+  if (!$('#setup').classList.contains('hidden')) document.title = t('setupTitle') + ' · Shadowing';
+  if (!$('#home').classList.contains('hidden')) renderLib();
+}));
 const COPY = { req: (API || location.origin) + '/api/req?u=', yt: 'https://www.youtube.com/youtubei/v1/player', ingest: INGEST_URL };
 document.querySelectorAll('#setup .copy').forEach(box => {
   const code = box.querySelector('code'); code.textContent = COPY[code.dataset.c];

@@ -26,3 +26,32 @@ info = api.create_commit(
     commit_message=f"Deploy from GitHub {sha[:7]}",
 )
 print("Deployed:", info.commit_url)
+
+# Wait for the Space to come back up, then report what it serves (shown as an annotation on the run).
+import json
+import time
+import urllib.request
+
+space_host = os.environ["SPACE_ID"].lower().replace("/", "-").replace("_", "-") + ".hf.space"
+stage, health = "", ""
+deadline = time.time() + 600
+time.sleep(20)
+while time.time() < deadline:
+    try:
+        stage = api.get_space_runtime(os.environ["SPACE_ID"]).stage
+    except Exception as e:  # noqa: BLE001
+        stage = f"? {e}"
+    if stage == "RUNNING":
+        try:
+            with urllib.request.urlopen(f"https://{space_host}/healthz", timeout=20) as r:
+                health = r.read().decode()[:400]
+            if sha and json.loads(health).get("deployed_from"):
+                break
+        except Exception as e:  # noqa: BLE001
+            health = f"healthz error: {e}"
+    elif "ERROR" in str(stage):
+        break
+    time.sleep(15)
+print(f"::notice title=Space status::stage={stage} health={health}")
+if stage != "RUNNING":
+    raise SystemExit(f"Space did not start: {stage}")

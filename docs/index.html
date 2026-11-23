@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Shadowing</title>
+<meta name="theme-color" content="#f8f6f2">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Shadowing">
+<link rel="apple-touch-icon" href="https://zenaidiuno-shadowing-v2.hf.space/icon-180.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%2306259d'/%3E%3Cpath d='M9 6.5v11l8.5-5.5z' fill='white'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#f8f6f2; --card:#fff; --ink:#1f1d1a; --muted:#8c867e; --line:#ebe6df;
+  --accent:#06259d; --accent-ink:#06207f; --accent-soft:#e4e8f6; --accent-line:#9ba8d8;
+  --ok:#1e9e4a; --bad:#d93025;
+  --btn:#efece8; --font:20px;
+  --sat:env(safe-area-inset-top); --sab:env(safe-area-inset-bottom);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,"Noto Naskh Arabic",Tahoma,sans-serif}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;touch-action:manipulation}
+svg{display:block}
+.hidden{display:none!important}
+
+/* ---------- home ---------- */
+#home{max-width:680px;margin:0 auto;padding:calc(28px + var(--sat)) 18px calc(30px + var(--sab))}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.logo{width:44px;height:44px;border-radius:12px;background:var(--accent);display:grid;place-items:center;color:#fff;flex:none}
+.brand h1{margin:0;font-size:28px;letter-spacing:-.5px}
+.tag{color:var(--muted);margin:2px 0 22px;font-size:15px}
+.inrow{display:flex;gap:8px}
+.inrow input{flex:1;min-width:0;height:52px;border-radius:14px;border:1.5px solid var(--line);background:#fff;
+  padding:0 14px;font-size:16px;direction:ltr;text-align:left;outline:none}
+.inrow input:focus{border-color:var(--accent-line)}
+.iconbtn{width:52px;height:52px;border-radius:14px;background:var(--btn);display:grid;place-items:center;flex:none}
+.go{width:100%;height:52px;border-radius:14px;background:var(--accent);color:#fff;font-weight:600;font-size:17px;margin-top:10px}
+.go:active{filter:brightness(.92)}
+.msg{margin-top:12px;padding:12px 14px;border-radius:12px;background:#fdecea;color:#8a2c1d;font-size:15px;line-height:1.5}
+.libh{margin:30px 0 10px;font-size:15px;color:var(--muted);font-weight:600}
+.lib{display:flex;flex-direction:column;gap:10px}
+.item{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:14px;padding:8px;cursor:pointer}
+.item img{width:112px;height:63px;border-radius:9px;object-fit:cover;background:#ddd;flex:none}
+.item .t{flex:1;min-width:0}
+.item .t b{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:15px;font-weight:600;line-height:1.35}
+.item .t span{font-size:13px;color:var(--muted)}
+.del{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;color:var(--muted);flex:none}
+.empty{color:var(--muted);font-size:14px;padding:8px 2px;line-height:1.6}
+.hcard{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:10px;line-height:1.7;font-size:15px}
+.hcard p{margin:4px 0 10px;color:#4a463f}
+.hcard .pill{display:inline-block;text-decoration:none}
+.bm{display:inline-block;padding:9px 16px;border-radius:999px;background:var(--accent);color:#fff;text-decoration:none;font-weight:600;direction:ltr;cursor:grab}
+
+/* ---------- setup ---------- */
+#setup{max-width:680px;margin:0 auto;padding:calc(10px + var(--sat)) 16px calc(40px + var(--sab))}
+#setup .top{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+#setup .top b{font-size:19px}
+#setup h4{margin:22px 0 6px;font-size:16px}
+#setup .lead{line-height:1.8;font-size:15.5px;color:#3d3a35;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+#setup ol{padding-inline-start:24px;line-height:1.9;font-size:15.5px;margin:6px 0}
+#setup li{margin-bottom:12px}
+.copy{display:flex;gap:6px;align-items:center;margin:6px 0;direction:ltr}
+.copy code{flex:1;min-width:0;background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:8px 10px;font-size:12.5px;word-break:break-all;line-height:1.4}
+.copy button{flex:none;padding:8px 12px;border-radius:10px;background:var(--accent);color:#fff;font-size:14px}
+
+/* ---------- player ---------- */
+#player{height:100vh;height:100dvh;display:flex;flex-direction:column;max-width:820px;margin:0 auto;overflow:hidden}
+header{display:flex;align-items:center;gap:6px;padding:calc(6px + var(--sat)) 10px 4px;flex:none}
+header .mid{flex:1;min-width:0;text-align:center}
+header .ttl{font-weight:600;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+header .sub{font-size:13px;color:var(--muted);margin-top:2px}
+.hbtn{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;flex:none}
+.hbtn.gear{background:var(--btn)}
+.score{display:flex;align-items:center;gap:10px;padding:2px 16px 8px;flex:none;direction:ltr}
+.score .num{font-weight:800;font-size:15px;color:var(--accent);font-variant-numeric:tabular-nums;min-width:68px}
+.score .num small{font-weight:600;color:var(--muted)}
+.score .bar{flex:1;height:8px;border-radius:99px;background:#e6e2db;overflow:hidden}
+.score .bar i{display:block;height:100%;width:0;background:var(--accent);border-radius:99px;transition:width .5s ease}
+.score.full .bar i{background:var(--ok)}
+.score.full .num{color:var(--ok)}
+.vwrap{position:relative;width:min(100%, calc(40vh * 16 / 9));align-self:center;aspect-ratio:16/9;background:#000;flex:none}
+.vwrap>div,.vwrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.ctrls{display:flex;justify-content:center;align-items:center;gap:12px;padding:12px 8px;border-bottom:1px solid var(--line);flex:none;direction:ltr}
+.cb{width:54px;height:54px;border-radius:50%;background:var(--btn);display:grid;place-items:center;transition:transform .08s;flex:none}
+.cb:active{transform:scale(.93)}
+.cb.play{width:68px;height:68px;background:var(--accent);color:#fff}
+.cb.loop,.cb.range{background:var(--accent-soft);color:var(--accent)}
+.cb.loop.on,.cb.range.on{background:var(--accent);color:#fff}
+.cb.range.pick{background:#fff;box-shadow:inset 0 0 0 2.5px var(--accent)}
+#list{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 14px calc(40vh + var(--sab))}
+.card{position:relative;background:var(--card);border:1.5px solid transparent;border-radius:18px;padding:12px 16px 14px;margin-bottom:12px;
+  box-shadow:0 1px 0 var(--line);cursor:pointer;overflow:hidden}
+.card .row{display:flex;align-items:center;gap:8px;min-height:36px;direction:ltr}
+.ts{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.reps{font-size:12px;font-weight:700;color:var(--accent);display:none}
+.row .sp{flex:1}
+.say,.mic{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;flex:none}
+.say{background:var(--accent);color:#fff;display:none}
+.mic{background:var(--accent-soft);color:var(--accent);transition:background .2s,color .2s}
+.mic .ic-ok{display:none}
+.mic.ok{background:var(--ok);color:#fff}
+.mic.ok .ic-mic{display:none}
+.mic.ok .ic-ok{display:block}
+.mic.bad{background:var(--bad);color:#fff}
+.mic.rec{background:var(--bad);color:#fff;animation:pulse 1s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(217,48,37,.45)}50%{box-shadow:0 0 0 9px rgba(217,48,37,0)}}
+.txt{font-size:var(--font);line-height:1.45;margin-top:4px;font-weight:500}
+.tr{font-size:calc(var(--font) * .8);line-height:1.6;color:#57524b;margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+.tr:empty{display:none}
+.heard{font-size:13.5px;line-height:1.5;margin-top:8px;padding:6px 10px;border-radius:10px;background:#f4f2ee;color:#57524b}
+.heard:empty{display:none}
+.heard.good{background:#e6f5ec;color:#16723a}
+.heard.wrong{background:#fdecea;color:#a3261b}
+.card.on{background:var(--accent-soft);border-color:var(--accent-line);box-shadow:none}
+.card.on .txt{color:var(--accent-ink)}
+.card.on .ts{color:var(--accent-ink)}
+.card.on .say{display:grid}
+.card.on .mic{background:#fff}
+.card.on .mic.ok{background:var(--ok)}
+.card.on .mic.bad,.card.on .mic.rec{background:var(--bad)}
+.card.on .tr{border-color:#c9d1ee}
+.card.inrange{border-inline-start:5px solid var(--accent)}
+.card.pickA{box-shadow:inset 0 0 0 2.5px var(--accent)}
+.loopmode .card.on .reps{display:block}
+.prog{position:absolute;left:0;bottom:0;height:3px;background:var(--accent);width:0;opacity:0}
+.card.on .prog{opacity:.75}
+.card.wait .prog{background:#9ba8d8;opacity:1}
+.waitnote{display:none;font-size:13px;color:var(--accent-ink);margin-top:8px}
+.card.wait.tap .waitnote{display:block}
+.state{padding:40px 20px;text-align:center;color:var(--muted);line-height:1.7}
+.spin{width:34px;height:34px;border:3px solid var(--line);border-top-color:var(--accent);border-radius:50%;margin:0 auto 14px;animation:sp 0.9s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.state .btns{display:flex;gap:8px;justify-content:center;margin-top:16px;flex-wrap:wrap}
+.pill{padding:10px 16px;border-radius:999px;background:var(--btn);font-size:15px;text-decoration:none;color:inherit}
+.pill.primary{background:var(--accent);color:#fff}
+
+/* ---------- settings sheet ---------- */
+#sheetbg{position:fixed;inset:0;background:rgba(0,0,0,.28);z-index:20}
+#sheet{position:fixed;left:0;right:0;bottom:0;z-index:21;background:var(--bg);border-radius:20px 20px 0 0;
+  max-height:82vh;overflow-y:auto;padding:10px 18px calc(22px + var(--sab));max-width:820px;margin:0 auto}
+.grab{width:40px;height:5px;border-radius:3px;background:#d6d1ca;margin:0 auto 12px}
+#sheet h3{margin:4px 0 14px;font-size:18px}
+.sec{margin-bottom:16px}
+.sec label{display:block;font-size:14px;color:var(--muted);margin-bottom:7px}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{padding:9px 13px;border-radius:11px;background:#fff;border:1.5px solid var(--line);font-size:15px;unicode-bidi:plaintext}
+.seg button.sel{background:var(--accent);border-color:var(--accent);color:#fff}
+#sheet select{width:100%;height:44px;border-radius:11px;border:1.5px solid var(--line);background:#fff;font-size:15px;padding:0 10px}
+.hint{font-size:12.5px;color:var(--muted);margin-top:6px;line-height:1.5}
+
+#toast{position:fixed;left:50%;bottom:calc(24px + var(--sab));transform:translateX(-50%);background:#2a2724;color:#fff;
+  padding:11px 16px;border-radius:12px;font-size:14px;z-index:30;max-width:90vw;text-align:center;line-height:1.5;
+  opacity:0;pointer-events:none;transition:opacity .2s}
+#toast.show{opacity:1}
+@media (min-width:900px){ #list{padding-bottom:30vh} }
+</style>
+</head>
+<body>
+
+<!-- =============== HOME =============== -->
+<section id="home">
+  <div class="brand">
+    <div class="logo"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
+    <h1>Shadowing</h1>
+  </div>
+  <p class="tag" data-t="tag"></p>
+  <form id="form" autocomplete="off">
+    <div class="inrow">
+      <input id="url" type="url" inputmode="url" placeholder="https://youtu.be/..." aria-label="YouTube">
+      <button type="button" class="iconbtn" id="paste" data-ta="paste">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>
+      </button>
+    </div>
+    <button class="go" type="submit" data-t="start"></button>
+  </form>
+  <div id="homemsg" class="msg hidden"></div>
+  <div class="libh" data-t="yourVideos"></div>
+  <div id="lib" class="lib"></div>
+  <div class="libh" data-t="howNew"></div>
+  <div class="hcard">
+    <b data-t="fromIphone"></b>
+    <p data-t="iphoneHow"></p>
+    <a class="pill primary" href="#setup" data-t="setupBtn"></a>
+  </div>
+  <div class="hcard">
+    <b data-t="fromComputer"></b>
+    <p data-t="bmHow"></p>
+    <a class="bm" id="bm" href="#">▶ Shadowing</a>
+  </div>
+</section>
+
+<!-- =============== SETUP (iPhone Shortcut) =============== -->
+<section id="setup" class="hidden">
+  <div class="top">
+    <button class="hbtn" id="setupBack" data-ta="back"><svg class="flipx" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+    <b data-t="setupTitle"></b>
+  </div>
+  <p class="lead" data-t="setupLead"></p>
+  <h4 data-t="haveShortcut"></h4>
+  <ol>
+    <li data-t="dup1"></li>
+    <li data-t="dup2"></li>
+    <li><span data-t="dup3"></span><div class="copy"><code data-c="ingest"></code><button type="button" data-t="copy"></button></div></li>
+  </ol>
+  <h4 data-t="newShortcut"></h4>
+  <ol>
+    <li data-t="s1"></li>
+    <li><span data-t="s2"></span><div class="copy"><code data-c="req"></code><button type="button" data-t="copy"></button></div><span data-t="s2b"></span></li>
+    <li><span data-t="s3"></span><div class="copy"><code data-c="yt"></code><button type="button" data-t="copy"></button></div><span data-t="s3b"></span></li>
+    <li><span data-t="s4"></span><div class="copy"><code data-c="ingest"></code><button type="button" data-t="copy"></button></div><span data-t="s4b"></span></li>
+    <li data-t="s5"></li>
+    <li data-t="s6"></li>
+  </ol>
+  <h4 data-t="useTitle"></h4>
+  <ol>
+    <li data-t="u1"></li>
+    <li data-t="u2"></li>
+    <li data-t="u3"></li>
+    <li data-t="u4"></li>
+  </ol>
+</section>
+
+<!-- =============== PLAYER =============== -->
+<section id="player" class="hidden">
+  <header>
+    <button class="hbtn" id="back" data-ta="back">
+      <svg class="flipx" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <div class="mid">
+      <div class="ttl" id="ttl">Shadowing</div>
+      <div class="sub" id="sub">&nbsp;</div>
+    </div>
+    <button class="hbtn gear" id="gear" data-ta="settings">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </button>
+  </header>
+  <div class="score" id="score"><span class="num" id="scoreNum">0<small>/100</small></span><div class="bar"><i id="scoreBar"></i></div></div>
+  <div class="vwrap" id="vwrap"></div>
+  <div class="ctrls">
+    <button class="cb" id="prev" data-ta="prev">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="5" width="2.6" height="14" rx="1"/><path d="M19 5.5v13a.6.6 0 0 1-.93.5L8.6 12.5a.6.6 0 0 1 0-1L18.07 5a.6.6 0 0 1 .93.5z"/></svg>
+    </button>
+    <button class="cb play" id="play" data-ta="playPause">
+      <svg id="icoPlay" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.2v13.6a.7.7 0 0 0 1.06.6l10.9-6.8a.7.7 0 0 0 0-1.2L9.06 4.6A.7.7 0 0 0 8 5.2z"/></svg>
+      <svg id="icoPause" class="hidden" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1.2"/><rect x="14" y="5" width="4" height="14" rx="1.2"/></svg>
+    </button>
+    <button class="cb loop" id="loop" data-ta="loopBtn">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg>
+    </button>
+    <button class="cb range" id="range" data-ta="rangeBtn">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4H4v16h3"/><path d="M17 4h3v16h-3"/><path d="M9 9h6M9 15h6"/></svg>
+    </button>
+    <button class="cb" id="next" data-ta="next">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><rect x="16.4" y="5" width="2.6" height="14" rx="1"/><path d="M5 5.5v13a.6.6 0 0 0 .93.5l9.47-6.5a.6.6 0 0 0 0-1L5.93 5a.6.6 0 0 0-.93.5z"/></svg>
+    </button>
+  </div>
+  <div id="list"></div>
+</section>
+
+<!-- =============== SETTINGS =============== -->
+<div id="sheetbg" class="hidden"></div>
+<div id="sheet" class="hidden" role="dialog">
+  <div class="grab"></div>
+  <h3 data-t="settings"></h3>
+  <div class="sec"><label data-t="speed"></label><div class="seg" data-key="speed"></div></div>
+  <div class="sec"><label data-t="reps"></label><div class="seg" data-key="reps"></div><div class="hint" data-t="repsHint"></div></div>
+  <div class="sec"><label data-t="gap"></label><div class="seg" data-key="gap"></div></div>
+  <div class="sec"><label data-t="translation"></label><div class="seg" data-key="tr"></div></div>
+  <div class="sec"><label data-t="fontSize"></label><div class="seg" data-key="font"></div></div>
+  <div class="sec"><label data-t="uiLang"></label><div class="seg" data-key="ui"></div></div>
+  <div class="sec"><label data-t="score"></label><div class="seg"><button type="button" id="resetScore" data-t="resetScore"></button></div></div>
+  <div class="sec" id="tracksec"><label data-t="track"></label>
+    <select id="track"></select>
+    <div class="seg" style="margin-top:10px"><button type="button" id="refetch" data-t="refetch"></button></div>
+  </div>
+</div>
+<div id="toast"></div>
+
+<script>
+(() => {
+'use strict';
+const $ = s => document.querySelector(s);
+
+/* ================= where the server is ================= */
+// On GitHub Pages the page talks to the Hugging Face Space; on the Space (/v3) it is same-origin.
+const ON_SPACE = /\.hf\.space$/.test(location.hostname);
+const API = ON_SPACE ? '' : 'https://zenaidiuno-shadowing-v2.hf.space';
+const PAGE_ID = ON_SPACE ? 'v3' : 'gh';
+const INGEST_URL = (API || location.origin) + '/api/ingest?to=' + PAGE_ID;
+
+/* ================= storage ================= */
+const LS = {
+  get(k, d){ try{ const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); return true; }catch(e){ return false; } },
+  del(k){ try{ localStorage.removeItem(k); }catch(e){} }
+};
+const P = 'sh3:';
+
+/* ================= texts in the device's language ================= */
+const STR = {
+ar: {
+  tag:'الصق رابط فيديو يوتيوب، وتمرّن عليه جملة جملة.', start:'ابدأ', paste:'لصق', yourVideos:'فيديوهاتك',
+  noVideos:'ما فيه فيديوهات للحين. الفيديوهات اللي تفتحها تنحفظ هنا في جهازك.',
+  howNew:'طريقة فتح فيديو جديد', fromIphone:'📱 من الآيفون', iphoneHow:'في تطبيق يوتيوب اضغط «مشاركة» ثم «Shadowing 3»، ويفتح الدرس هنا مباشرة.',
+  setupBtn:'إعداد الاختصار (مرة وحدة)', fromComputer:'💻 من الكمبيوتر',
+  bmHow:'اسحب هذا الزر لشريط المفضلة، وبعدين اضغطه وأنت فاتح أي فيديو في يوتيوب:',
+  dragHint:'اسحب الزر لشريط المفضلة، واضغطه وأنت في صفحة فيديو يوتيوب', badUrl:'الرابط مو واضح. الصق رابط فيديو يوتيوب كامل.',
+  pasteHint:'اضغط مطوّل في الخانة واختر لصق', deleted:'انحذف من القائمة', sentences:'جملة', stoppedAt:'وقفت عند',
+  loading:'أجيب نص الفيديو وأقسّمه لجمل…', needShare:'افتح هذا الفيديو من تطبيق يوتيوب: اضغط «مشاركة» ثم «Shadowing 3». (يوتيوب يمنع سيرفر التطبيق من جلب النص مباشرة.)',
+  noCaptions:'هذا الفيديو ما فيه ترجمة نصية (Captions) على يوتيوب، فما أقدر أقسّمه لجمل.', captionFail:'يوتيوب ما أعطى ملف الترجمة. افتح الفيديو من المشاركة مرة ثانية.',
+  netFail:'ما قدرت أوصل للسيرفر. تأكد من النت وجرّب مرة ثانية.', setupHow:'طريقة الإعداد', retry:'حاول مرة ثانية', back:'رجوع',
+  settings:'الإعدادات', speed:'سرعة الفيديو', reps:'كم مرة يتكرر (لما يكون التكرار شغّال)',
+  repsHint:'∞ يعني يتكرر لين توقفه. لو اخترت رقم، ينتقل للي بعده تلقائياً.', gap:'وقفة بعد كل جملة (عشان تعيدها بصوتك)',
+  gNone:'بدون', g1:'ثانية', g2:'ثانيتين', g3:'3 ثواني', gLen:'بطول الجملة', gTap:'لين أضغط',
+  translation:'الترجمة تحت الجملة', off:'إخفاء', fontSize:'حجم الخط', fS:'صغير', fM:'وسط', fL:'كبير',
+  uiLang:'لغة الصفحة', auto:'تلقائي', score:'النتيجة', resetScore:'تصفير نتيجة هذا الفيديو', scoreReset:'انصفّرت النتيجة',
+  track:'نص الفيديو', refetch:'إعادة جلب النص وتقسيم الجمل',
+  loopOn:'التكرار شغّال: الجملة الحالية بتتكرر', loopOff:'التكرار طافي',
+  pickFirst:'اختر أول جملة', pickLast:'الحين اختر آخر جملة', rangeOn:'تكرار الجمل من {a} إلى {b}', rangeOff:'انلغى تكرار المجموعة',
+  tapContinue:'اضغط ▶ أو الجملة عشان تكمل', iosTap:'إذا ما اشتغل الفيديو، اضغط عليه مرة وحدة بنفسك (أول مرة بس)',
+  embedBlocked:'صاحب الفيديو مانع تشغيله خارج يوتيوب', videoErr:'الفيديو ما اشتغل (خطأ {e})', trFail:'بعض الجمل ما انترجمت.',
+  micNo:'المتصفح هذا ما يدعم التعرّف على الصوت. استخدم Safari على الآيفون.', micDenied:'لازم تسمح للصفحة تستخدم المايك (وفعّل الإملاء Dictation في الآيفون).',
+  micNothing:'ما سمعت شي. اضغط المايك وقل الجملة بصوت واضح.', heard:'سمعت', correct:'صح', full:'🎉 مبروك! خلّصت الفيديو كامل: 100/100',
+  copy:'نسخ', copied:'انسخ ✓', selected:'محدد. اضغط نسخ',
+  playPause:'تشغيل / إيقاف', prev:'الجملة السابقة', next:'الجملة التالية', loopBtn:'تكرار الجملة', rangeBtn:'تكرار مجموعة جمل', micBtn:'اختبر نطقك', sayBtn:'إعادة الجملة',
+  setupTitle:'إعداد اختصار الآيفون',
+  setupLead:'تسويه مرة وحدة بس. بعدها من أي فيديو في يوتيوب تضغط «مشاركة» ثم «Shadowing 3»، ويفتح الدرس في هذه الصفحة. الاختصار يستخدم نت جوالك، فيوتيوب ما يحجبه.',
+  haveShortcut:'إذا عندك اختصار Shadowing من قبل:', dup1:'افتح تطبيق «الاختصارات» (Shortcuts).',
+  dup2:'اضغط مطوّلاً على اختصار Shadowing، واختر «تكرار» (Duplicate)، وسمّ النسخة الجديدة Shadowing 3.',
+  dup3:'افتح Shadowing 3، وفي ثالث إجراء «الحصول على محتويات URL» امسح الرابط والصق هذا:',
+  newShortcut:'إذا ما عندك اختصار:', s1:'افتح تطبيق «الاختصارات» (Shortcuts)، واضغط +، وسمّ الاختصار Shadowing 3.',
+  s2:'أضف إجراء «الحصول على محتويات URL» (Get Contents of URL). امسح الرابط اللي فيه والصق:', s2b:'وبعد آخر حرف مباشرة اختر المتغير «مدخلات الاختصار» (Shortcut Input).',
+  s3:'أضف «الحصول على محتويات URL» ثاني، والرابط:', s3b:'اضغط «إظهار المزيد»، واختر الطريقة POST، ونص الطلب «ملف» (File)، والملف «محتويات URL» (نتيجة الخطوة 2).',
+  s4:'أضف «الحصول على محتويات URL» ثالث، والرابط:', s4b:'الطريقة POST، ونص الطلب «ملف»، والملف «محتويات URL» (نتيجة الخطوة 3).',
+  s5:'أضف إجراء «فتح عناوين URL» (Open URLs)، واختر «محتويات URL» (نتيجة الخطوة 4).',
+  s6:'من زر ⓘ تحت (تفاصيل الاختصار) فعّل «إظهار في ورقة المشاركة» (Show in Share Sheet).',
+  useTitle:'الاستخدام:', u1:'افتح الفيديو في تطبيق يوتيوب.', u2:'اضغط «مشاركة».', u3:'اضغط «المزيد» واختر Shadowing 3.', u4:'أول مرة بيسألك عن السماح بالاتصال، اختر «السماح دائماً».'
+},
+en: {
+  tag:'Paste a YouTube link and practise it sentence by sentence.', start:'Start', paste:'Paste', yourVideos:'Your videos',
+  noVideos:'No videos yet. Videos you open are saved on this device.',
+  howNew:'How to open a new video', fromIphone:'📱 From iPhone', iphoneHow:'In the YouTube app, tap “Share”, then “Shadowing 3”. The lesson opens here.',
+  setupBtn:'Set up the shortcut (once)', fromComputer:'💻 From a computer',
+  bmHow:'Drag this button to your bookmarks bar, then click it while any YouTube video is open:',
+  dragHint:'Drag the button to your bookmarks bar, then click it on a YouTube video page', badUrl:'That link isn’t clear. Paste a full YouTube video link.',
+  pasteHint:'Long-press the box and choose Paste', deleted:'Removed from the list', sentences:'sentences', stoppedAt:'stopped at',
+  loading:'Getting the captions and splitting them into sentences…', needShare:'Open this video from the YouTube app: tap “Share”, then “Shadowing 3”. (YouTube blocks the app’s server from fetching captions directly.)',
+  noCaptions:'This video has no captions on YouTube, so it can’t be split into sentences.', captionFail:'YouTube didn’t return the caption file. Share the video to Shadowing again.',
+  netFail:'Couldn’t reach the server. Check your connection and try again.', setupHow:'How to set it up', retry:'Try again', back:'Back',
+  settings:'Settings', speed:'Video speed', reps:'How many times to repeat (when repeat is on)',
+  repsHint:'∞ repeats until you stop it. With a number, it moves on automatically.', gap:'Pause after each sentence (to repeat it aloud)',
+  gNone:'None', g1:'1 s', g2:'2 s', g3:'3 s', gLen:'Sentence length', gTap:'Until I tap',
+  translation:'Translation under each sentence', off:'Hide', fontSize:'Text size', fS:'Small', fM:'Medium', fL:'Large',
+  uiLang:'Page language', auto:'Automatic', score:'Score', resetScore:'Reset this video’s score', scoreReset:'Score reset',
+  track:'Captions', refetch:'Fetch captions and split again',
+  loopOn:'Repeat on: the current sentence will loop', loopOff:'Repeat off',
+  pickFirst:'Pick the first sentence', pickLast:'Now pick the last sentence', rangeOn:'Repeating sentences {a} to {b}', rangeOff:'Group repeat cancelled',
+  tapContinue:'Tap ▶ or the sentence to continue', iosTap:'If the video doesn’t start, tap it once yourself (first time only)',
+  embedBlocked:'The owner doesn’t allow this video to play outside YouTube', videoErr:'The video didn’t play (error {e})', trFail:'Some sentences weren’t translated.',
+  micNo:'This browser can’t recognise speech. Use Safari on iPhone.', micDenied:'Allow the page to use the microphone (and turn on Dictation on iPhone).',
+  micNothing:'I didn’t hear anything. Tap the mic and say the sentence clearly.', heard:'Heard', correct:'Correct', full:'🎉 Well done! You finished the whole video: 100/100',
+  copy:'Copy', copied:'Copied ✓', selected:'Selected. Tap Copy',
+  playPause:'Play / pause', prev:'Previous sentence', next:'Next sentence', loopBtn:'Repeat sentence', rangeBtn:'Repeat a group of sentences', micBtn:'Test your pronunciation', sayBtn:'Replay sentence',
+  setupTitle:'iPhone shortcut setup',
+  setupLead:'You do this once. Then from any YouTube video tap “Share”, then “Shadowing 3”, and the lesson opens on this page. The shortcut uses your phone’s internet, so YouTube doesn’t block it.',
+  haveShortcut:'If you already have the Shadowing shortcut:', dup1:'Open the Shortcuts app.',
+  dup2:'Long-press the Shadowing shortcut, choose Duplicate, and name the copy Shadowing 3.',
+  dup3:'Open Shadowing 3 and, in the third “Get Contents of URL” action, replace the address with:',
+  newShortcut:'If you don’t have a shortcut yet:', s1:'Open the Shortcuts app, tap +, and name it Shadowing 3.',
+  s2:'Add the “Get Contents of URL” action. Delete its address and paste:', s2b:'Right after the last character, insert the variable “Shortcut Input”.',
+  s3:'Add a second “Get Contents of URL” with the address:', s3b:'Tap “Show More”: Method POST, Request Body “File”, and the file “Contents of URL” (the result of step 2).',
+  s4:'Add a third “Get Contents of URL” with the address:', s4b:'Method POST, Request Body “File”, file “Contents of URL” (the result of step 3).',
+  s5:'Add the “Open URLs” action and choose “Contents of URL” (the result of step 4).',
+  s6:'From the ⓘ button (shortcut details) turn on “Show in Share Sheet”.',
+  useTitle:'How to use it:', u1:'Open the video in the YouTube app.', u2:'Tap “Share”.', u3:'Tap “More” and choose Shadowing 3.', u4:'The first time it asks to allow the connection, choose “Always Allow”.'
+},
+it: {
+  tag:'Incolla un link di YouTube ed esercitati frase per frase.', start:'Inizia', paste:'Incolla', yourVideos:'I tuoi video',
+  noVideos:'Ancora nessun video. I video che apri vengono salvati su questo dispositivo.',
+  howNew:'Come aprire un nuovo video', fromIphone:'📱 Da iPhone', iphoneHow:'Nell’app YouTube tocca «Condividi», poi «Shadowing 3». La lezione si apre qui.',
+  setupBtn:'Configura la scorciatoia (una volta)', fromComputer:'💻 Dal computer',
+  bmHow:'Trascina questo pulsante nella barra dei preferiti, poi cliccalo mentre guardi un video su YouTube:',
+  dragHint:'Trascina il pulsante nella barra dei preferiti e cliccalo su una pagina video di YouTube', badUrl:'Il link non è chiaro. Incolla il link completo di un video YouTube.',
+  pasteHint:'Tieni premuto nel campo e scegli Incolla', deleted:'Rimosso dall’elenco', sentences:'frasi', stoppedAt:'fermo alla',
+  loading:'Prendo i sottotitoli e li divido in frasi…', needShare:'Apri questo video dall’app YouTube: tocca «Condividi», poi «Shadowing 3». (YouTube blocca il server dell’app.)',
+  noCaptions:'Questo video non ha sottotitoli su YouTube, quindi non posso dividerlo in frasi.', captionFail:'YouTube non ha dato il file dei sottotitoli. Condividi di nuovo il video su Shadowing.',
+  netFail:'Server non raggiungibile. Controlla la connessione e riprova.', setupHow:'Come configurarlo', retry:'Riprova', back:'Indietro',
+  settings:'Impostazioni', speed:'Velocità del video', reps:'Quante ripetizioni (con la ripetizione attiva)',
+  repsHint:'∞ ripete finché non lo fermi. Con un numero passa avanti da solo.', gap:'Pausa dopo ogni frase (per ripeterla a voce)',
+  gNone:'Nessuna', g1:'1 s', g2:'2 s', g3:'3 s', gLen:'Come la frase', gTap:'Finché tocco',
+  translation:'Traduzione sotto la frase', off:'Nascondi', fontSize:'Dimensione testo', fS:'Piccolo', fM:'Medio', fL:'Grande',
+  uiLang:'Lingua della pagina', auto:'Automatica', score:'Punteggio', resetScore:'Azzera il punteggio di questo video', scoreReset:'Punteggio azzerato',
+  track:'Sottotitoli', refetch:'Riprendi i sottotitoli e ridividi',
+  loopOn:'Ripetizione attiva: la frase corrente si ripete', loopOff:'Ripetizione disattivata',
+  pickFirst:'Scegli la prima frase', pickLast:'Ora scegli l’ultima frase', rangeOn:'Ripeto le frasi da {a} a {b}', rangeOff:'Ripetizione del gruppo annullata',
+  tapContinue:'Tocca ▶ o la frase per continuare', iosTap:'Se il video non parte, toccalo una volta (solo la prima volta)',
+  embedBlocked:'Il proprietario non permette di vedere questo video fuori da YouTube', videoErr:'Il video non è partito (errore {e})', trFail:'Alcune frasi non sono state tradotte.',
+  micNo:'Questo browser non riconosce la voce. Usa Safari su iPhone.', micDenied:'Consenti alla pagina di usare il microfono (e attiva la Dettatura su iPhone).',
+  micNothing:'Non ho sentito niente. Tocca il microfono e di’ la frase chiaramente.', heard:'Ho sentito', correct:'Giusto', full:'🎉 Bravo! Hai finito tutto il video: 100/100',
+  copy:'Copia', copied:'Copiato ✓', selected:'Selezionato. Tocca Copia',
+  playPause:'Play / pausa', prev:'Frase precedente', next:'Frase successiva', loopBtn:'Ripeti la frase', rangeBtn:'Ripeti un gruppo di frasi', micBtn:'Prova la pronuncia', sayBtn:'Riascolta la frase',
+  setupTitle:'Scorciatoia per iPhone',
+  setupLead:'Lo fai una volta sola. Poi da qualsiasi video di YouTube tocchi «Condividi» e «Shadowing 3», e la lezione si apre in questa pagina. La scorciatoia usa la connessione del telefono, quindi YouTube non la blocca.',
+  haveShortcut:'Se hai già la scorciatoia Shadowing:', dup1:'Apri l’app Comandi (Shortcuts).',
+  dup2:'Tieni premuto su Shadowing, scegli «Duplica» e chiama la copia Shadowing 3.',
+  dup3:'Apri Shadowing 3 e, nella terza azione «Ottieni contenuti dell’URL», sostituisci l’indirizzo con:',
+  newShortcut:'Se non hai ancora una scorciatoia:', s1:'Apri l’app Comandi, tocca + e chiamala Shadowing 3.',
+  s2:'Aggiungi l’azione «Ottieni contenuti dell’URL». Cancella l’indirizzo e incolla:', s2b:'Subito dopo l’ultimo carattere inserisci la variabile «Input comando rapido».',
+  s3:'Aggiungi una seconda «Ottieni contenuti dell’URL» con l’indirizzo:', s3b:'Tocca «Mostra di più»: Metodo POST, Corpo della richiesta «File», file «Contenuti dell’URL» (risultato del passo 2).',
+  s4:'Aggiungi una terza «Ottieni contenuti dell’URL» con l’indirizzo:', s4b:'Metodo POST, Corpo «File», file «Contenuti dell’URL» (risultato del passo 3).',
+  s5:'Aggiungi l’azione «Apri URL» e scegli «Contenuti dell’URL» (risultato del passo 4).',
+  s6:'Dal pulsante ⓘ (dettagli) attiva «Mostra nel foglio di condivisione».',
+  useTitle:'Come si usa:', u1:'Apri il video nell’app YouTube.', u2:'Tocca «Condividi».', u3:'Tocca «Altro» e scegli Shadowing 3.', u4:'La prima volta chiede il permesso di connessione: scegli «Consenti sempre».'
+}};
+const UI_LANGS = [['auto', null], ['ar','العربية'], ['en','English'], ['it','Italiano']];
+const settings = Object.assign({speed:1, reps:0, gap:'0', tr:null, font:'m', loop:false, ui:'auto'}, LS.get(P+'settings', {}));
+const saveSettings = () => LS.set(P+'settings', settings);
+const base = c => (c||'').split('-')[0].toLowerCase();
+const DEVICE = base((navigator.languages && navigator.languages[0]) || navigator.language || 'en');
+let L = 'en';
+function t(k, vars){ let s = (STR[L] && STR[L][k]) || STR.en[k] || k; if (vars) for (const v in vars) s = s.replace('{'+v+'}', vars[v]); return s; }
+function applyLang(){
+  L = settings.ui !== 'auto' ? settings.ui : (STR[DEVICE] ? DEVICE : 'en');
+  const rtl = L === 'ar';
+  document.documentElement.lang = L; document.documentElement.dir = rtl ? 'rtl' : 'ltr';
+  document.querySelectorAll('[data-t]').forEach(el => { el.textContent = t(el.dataset.t); });
+  document.querySelectorAll('[data-ta]').forEach(el => { el.setAttribute('aria-label', t(el.dataset.ta)); el.title = t(el.dataset.ta); });
+  document.querySelectorAll('svg.flipx').forEach(s => { s.style.transform = rtl ? 'scaleX(-1)' : ''; });
+}
+// translation language: the device language by default (English if the device speaks the video's language)
+function trLang(){ if (settings.tr) return settings.tr; const vl = st.data ? base(st.data.language_code) : ''; return DEVICE && DEVICE !== vl ? DEVICE : (vl === 'en' ? 'ar' : 'en'); }
+const RTL_LANGS = new Set(['ar','he','fa','ur']);
+
+const OPTIONS = () => ({
+  speed: [[0.5,'0.5×'],[0.75,'0.75×'],[1,'1×'],[1.25,'1.25×']],
+  reps:  [[0,'∞'],[2,'2'],[3,'3'],[5,'5']],
+  gap:   [['0',t('gNone')],['1',t('g1')],['2',t('g2')],['3',t('g3')],['len',t('gLen')],['tap',t('gTap')]],
+  tr:    [...new Set([DEVICE, 'ar', 'en'])].filter(Boolean).map(c => [c, langName(c)]).concat([['off', t('off')]]),
+  font:  [['s',t('fS')],['m',t('fM')],['l',t('fL')]],
+  ui:    UI_LANGS.map(([c, n]) => [c, n || t('auto')]),
+});
+function langName(c){ try { return new Intl.DisplayNames([c], {type:'language'}).of(c) || c; } catch(e){ return c; } }
+const FONT = {s:'17px', m:'20px', l:'24px'};
+
+const st = {
+  vid:null, data:null, S:[], idx:0, reps:0, player:null, ready:false,
+  seekTarget:null, seekAt:0, seekDeadline:0, pending:null, gapTimer:null,
+  userScrollAt:0, trToken:0, hinted:false, cards:[], range:null, pick:false, pickA:null, rec:null, recIdx:-1
+};
+
+/* ================= utils ================= */
+function fmt(t){ t = Math.max(0, Math.floor(t)); const h=Math.floor(t/3600), m=Math.floor(t%3600/60), s=t%60;
+  return (h? h+':'+String(m).padStart(2,'0') : m) + ':' + String(s).padStart(2,'0'); }
+function esc(s){ return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function vidFrom(raw){
+  raw = (raw||'').trim();
+  if (/^[A-Za-z0-9_-]{11}$/.test(raw)) return raw;
+  const m = raw.match(/(?:v=|\/v\/|youtu\.be\/|\/embed\/|\/shorts\/|\/live\/)([A-Za-z0-9_-]{11})/);
+  return m ? m[1] : null;
+}
+let toastT;
+function toast(msg, ms=3200){ const el=$('#toast'); el.textContent=msg; el.style.direction = L==='ar' ? 'rtl' : 'ltr'; el.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove('show'), ms); }
+
+/* ================= sentence splitting (on the device) ================= */
+// Same rules as the server, plus: no sentence longer than MAX_W words.
+const MAX_W = 13, MIN_W = 3;
+const TERMINAL = /[.!?…。！？]+["'»”’)\]]*$/;
+const ABBREV = new Set(['sig.','sig.ra','dott.','dr.','prof.','ecc.','etc.','mr.','mrs.','ms.','st.','ing.','avv.','pag.','vs.']);
+const CONJ = new Set(['e','ed','ma','però','perché','che','quando','se','quindi','poi','oppure','o','mentre','anche','perciò','cioè','dove','come','allora','infatti',
+  'and','but','because','so','or','when','if','then','that','which','y','pero','porque','que','et','mais','parce','und','aber','weil','dass']);
+function cleanCap(s){ return s.replace(/\n/g,' ').replace(/​/g,'').replace(/\[[^\]]*\]/g,' ').replace(/&gt;&gt;|>>/g,' ').replace(/\s+/g,' ').trim(); }
+function json3ToCues(data){
+  const cues = [];
+  for (const ev of (data.events || [])){
+    const segs = ev.segs; if (!segs || !segs.length) continue;
+    const t0 = (ev.tStartMs || 0) / 1000, dur = (ev.dDurationMs || 0) / 1000, words = [];
+    for (const sg of segs){
+      const txt = sg.utf8 || ''; if (!txt.trim()) continue;
+      const hasOff = ('tOffsetMs' in sg) || segs.length > 1;
+      const tt = hasOff ? t0 + (sg.tOffsetMs || 0) / 1000 : null;
+      cleanCap(txt).split(' ').filter(Boolean).forEach((w, j) => words.push([w, j === 0 ? tt : null]));
+    }
+    if (words.length) cues.push({start:t0, end:t0 + Math.max(dur, 0.2), words});
+  }
+  for (let i = 0; i < cues.length - 1; i++) if (cues[i].start < cues[i+1].start && cues[i+1].start < cues[i].end) cues[i].end = cues[i+1].start;
+  return cues;
+}
+function timedWords(cues){
+  const out = [];
+  for (const c of cues){
+    const total = c.words.reduce((a, [w]) => a + w.length + 1, 0) || 1, span = Math.max(c.end - c.start, 0.2); let off = 0;
+    c.words.forEach(([w, tt], k) => { out.push({w, t: tt != null ? tt : c.start + span * off / total, real: tt != null, cueEnd: k === c.words.length - 1, cend: c.end}); off += w.length + 1; });
+  }
+  for (let i = 1; i < out.length; i++) if (out[i].t < out[i-1].t) out[i].t = out[i-1].t;
+  out.forEach((w, i) => {
+    const nxt = i + 1 < out.length ? out[i+1].t : null;
+    let limit = (w.cueEnd || nxt == null) ? w.cend : nxt;
+    if (nxt != null && nxt > w.t) limit = Math.min(limit, nxt);
+    const e = w.real ? Math.min(limit, w.t + 0.15 + 0.07 * w.w.length) : limit;
+    w.e = Math.max(e, w.t + 0.1);
+  });
+  return out;
+}
+function bestCut(g){ // where to cut a long sentence: a comma/quote/conjunction or a pause, near the middle
+  const n = g.length; let best = -1, bestScore = -1e9;
+  for (let k = MIN_W - 1; k <= n - MIN_W - 1; k++){
+    const w = g[k].w, nx = g[k+1]; let s = 0;
+    if (/[,;:—–]$/.test(w)) s += 3;
+    if (/["»”’)]$/.test(w) || /^["«“(]/.test(nx.w)) s += 2;
+    if (CONJ.has(nx.w.toLowerCase().replace(/[^\p{L}']/gu, ''))) s += 1.2;
+    s += Math.min(Math.max(nx.t - g[k].e, 0), 1) * 4;
+    s -= Math.abs((k + 1) - n / 2) / n * 4;
+    if (s > bestScore){ bestScore = s; best = k; }
+  }
+  return best;
+}
+function splitLong(g){
+  if (g.length <= MAX_W) return [g];
+  const k = bestCut(g); if (k < 0) return [g];
+  return [...splitLong(g.slice(0, k + 1)), ...splitLong(g.slice(k + 1))];
+}
+function joinWords(ws){ return ws.map(w => w.w).join(' ').replace(/\s+([,.;:!?…»”’)])/g, '$1').replace(/([«“(])\s+/g, '$1').trim(); }
+function finishSentences(pieces){
+  const sents = pieces.map(g => ({start: +g[0].t.toFixed(2), end: +g[g.length-1].e.toFixed(2), text: joinWords(g)})).filter(s => s.text);
+  for (let i = 0; i < sents.length - 1; i++){
+    const a = sents[i], b = sents[i+1];
+    if (b.start - a.end < 0.8) a.end = b.start; else a.end = +(a.end + 0.35).toFixed(2);
+    if (a.end <= a.start) a.end = +(a.start + 0.8).toFixed(2);
+  }
+  if (sents.length){ const l = sents[sents.length-1]; l.end = +Math.max(l.end + 0.4, l.start + 0.8).toFixed(2); }
+  return sents;
+}
+function splitSentences(cues){
+  const words = timedWords(cues);
+  if (!words.length) return {sents: [], punctuated: false};
+  const punctuated = words.filter(w => TERMINAL.test(w.w)).length >= Math.max(2, words.length / 40);
+  const hasWT = cues.reduce((a, c) => a + c.words.filter(([, tt]) => tt != null).length, 0) > words.length * 0.5;
+  const groups = []; let cur = [];
+  words.forEach((w, i) => {
+    cur.push(w); const n = cur.length, nxt = words[i+1], gap = nxt ? nxt.t - w.e : 99; let brk = false;
+    if (punctuated) brk = TERMINAL.test(w.w) && !ABBREV.has(w.w.toLowerCase()) && !/^\d+\.$/.test(w.w);
+    else if (hasWT) brk = (gap >= 0.55 && n >= 4) || (gap >= 0.3 && n >= 10);
+    else brk = (w.cueEnd && n >= 6) || (w.cueEnd && gap >= 0.6 && n >= 3);
+    if (brk || !nxt){ groups.push(cur); cur = []; }
+  });
+  const merged = [];
+  for (const g of groups){
+    const last = merged[merged.length-1];
+    if (last && g.length === 1 && !TERMINAL.test(g[0].w) && g[0].t - last[last.length-1].e < 0.6) last.push(...g); else merged.push(g);
+  }
+  return {sents: finishSentences(merged.flatMap(splitLong)), punctuated};
+}
+function resplit(sents){ // sentences without word times (e.g. from the server cache): estimate them
+  const pieces = [];
+  for (const s of sents){
+    const ws = s.text.split(/\s+/).filter(Boolean), total = ws.reduce((a, w) => a + w.length + 1, 0) || 1; let off = 0;
+    const g = ws.map(w => { const tt = s.start + (s.end - s.start) * off / total; off += w.length + 1; return {w, t: tt, e: s.start + (s.end - s.start) * off / total}; });
+    pieces.push(...splitLong(g));
+  }
+  return finishSentences(pieces);
+}
+
+/* ================= translation (on the device, Standard Arabic kept) ================= */
+// Fillers like "eh", "oh" push Google's Arabic into Egyptian dialect: removed from the text sent only.
+const FILLERS = /[,;]?\s*\b(e+h+|e+hm+|a+h+|o+h+|u+h+|u+hm+|m+h+|beh|mah|ahah\w*)\b(?=[\s,.!?;:…]|$)/gi;
+const DIALECT = /(?:^|[\s،.!?؟«"])(مفيش|ده|إيه|ايه|مش|عشان|علشان|كده|كدا|بتاع|بتاعة|بتاعت|أوي|اوي|إزاي|ازاي|دلوقتي|دلوقت|عايز|عايزة|عاوز|فين|إمتى|امتى|بص|بس|اللي|ليه|يا عم|هوه|إحنا|احنا|بقى|كمان|برضه|برضو)(?=$|[\s،.!?؟»"])/g;
+function stripFillers(s){
+  const c = s.replace(FILLERS, '').replace(/^[\s,;.…]+/, '').replace(/(^|["«“(])\s*[,;]\s*/g, '$1')
+    .replace(/\s+([,.!?;:])/g, '$1').replace(/,(\s*[.!?])/g, '$1').replace(/\s{2,}/g, ' ').trim();
+  return /\p{L}/u.test(c) ? c : s;
+}
+const dscore = s => (String(s || '').match(DIALECT) || []).length;
+async function gtx(text, sl, tl){
+  const r = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${encodeURIComponent(sl || 'auto')}&tl=${encodeURIComponent(tl)}&dt=t`,
+    {method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:'q=' + encodeURIComponent(text)});
+  const j = await r.json();
+  return (j[0] || []).map(p => p[0] || '').join('');
+}
+async function gtxLines(lines, sl, tl){
+  const out = new Array(lines.length).fill(null); const chunks = []; let cur = [], size = 0;
+  lines.forEach((l, i) => { const n = l.length + 1; if (cur.length && size + n > 3500){ chunks.push(cur); cur = []; size = 0; } cur.push(i); size += n; });
+  if (cur.length) chunks.push(cur);
+  for (const idxs of chunks){
+    let res = [];
+    try { res = (await gtx(idxs.map(i => lines[i].replace(/\n/g, ' ')).join('\n'), sl, tl)).split('\n'); } catch(e){}
+    if (res.length === idxs.length) idxs.forEach((i, k) => { out[i] = res[k].trim(); });
+    else for (const i of idxs){ try { out[i] = (await gtx(lines[i], sl, tl)).trim(); } catch(e){} }
+  }
+  return out;
+}
+async function translateLines(texts, sl, tl){
+  const ar = tl === 'ar';
+  const src = texts.map(x => ar ? stripFillers(x) : x);
+  const out = await gtxLines(src, sl, tl);
+  if (ar){
+    const bad = out.map((x, i) => [i, x]).filter(([, x]) => x && dscore(x)).map(([i]) => i);
+    if (bad.length){
+      const en = await gtxLines(bad.map(i => src[i]), sl, 'en');
+      const ar2 = await gtxLines(en.map(e => stripFillers(e || '')), 'en', 'ar');
+      bad.forEach((i, k) => { if (ar2[k] && dscore(ar2[k]) < dscore(out[i])) out[i] = ar2[k]; });
+    }
+  }
+  return out;
+}
+
+/* ================= pronunciation check ================= */
+const NUM = {zero:0,uno:1,una:1,un:1,due:2,tre:3,quattro:4,cinque:5,sei:6,sette:7,otto:8,nove:9,dieci:10,undici:11,dodici:12,tredici:13,
+  quattordici:14,quindici:15,sedici:16,diciassette:17,diciotto:18,diciannove:19,venti:20,trenta:30,quaranta:40,cinquanta:50,cento:100,mille:1000,
+  one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10};
+function normWords(s){
+  return String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[’'`]/g, ' ')
+    .replace(/[^\p{L}\p{N}\s]/gu, ' ').split(/\s+/).filter(Boolean).map(w => NUM[w] != null ? String(NUM[w]) : w);
+}
+function lev(a, b){
+  const m = a.length, n = b.length; if (!m) return n; if (!n) return m;
+  let prev = Array.from({length: n + 1}, (_, j) => j);
+  for (let i = 1; i <= m; i++){ const cur = [i]; for (let j = 1; j <= n; j++) cur[j] = Math.min(prev[j] + 1, cur[j-1] + 1, prev[j-1] + (a[i-1] === b[j-1] ? 0 : 1)); prev = cur; }
+  return prev[n];
+}
+function wordEq(a, b){ if (a === b) return true; const L2 = Math.max(a.length, b.length); return Math.min(a.length, b.length) >= 4 && lev(a, b) <= (L2 >= 8 ? 2 : 1); }
+function similarity(target, heard){ // share of the sentence's words heard in order (fuzzy)
+  const A = normWords(target), B = normWords(heard); if (!A.length) return 0;
+  const dp = Array.from({length: A.length + 1}, () => new Array(B.length + 1).fill(0));
+  for (let i = 1; i <= A.length; i++) for (let j = 1; j <= B.length; j++)
+    dp[i][j] = wordEq(A[i-1], B[j-1]) ? dp[i-1][j-1] + 1 : Math.max(dp[i-1][j], dp[i][j-1]);
+  return dp[A.length][B.length] / A.length;
+}
+const PASS = 0.75;
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+const SR_LOCALE = {it:'it-IT', en:'en-US', es:'es-ES', fr:'fr-FR', de:'de-DE', pt:'pt-PT', ar:'ar-SA', ru:'ru-RU', ja:'ja-JP', zh:'zh-CN', tr:'tr-TR', nl:'nl-NL'};
+
+/* ================= library ================= */
+function lib(){ return LS.get(P+'lib', []); }
+function saveVideo(){
+  if (!st.data || !st.vid || !st.S.length) return;
+  st.data.idx = st.idx;
+  if (!LS.set(P+'v:'+st.vid, st.data)){
+    const Lb = lib(); while (Lb.length > 1){ const old = Lb.pop(); LS.del(P+'v:'+old.vid); if (LS.set(P+'v:'+st.vid, st.data)) break; }
+    LS.set(P+'lib', Lb);
+  }
+  const Lb = lib().filter(x => x.vid !== st.vid);
+  Lb.unshift({vid:st.vid, title:st.data.title||'', n:st.S.length, lang:st.data.language_code||'', idx:st.idx, score:scoreOf(st.data), at:Date.now()});
+  LS.set(P+'lib', Lb.slice(0, 60));
+}
+let saveT; function saveSoon(){ clearTimeout(saveT); saveT = setTimeout(saveVideo, 800); }
+function renderLib(){
+  const Lb = lib(), box = $('#lib');
+  if (!Lb.length){ box.innerHTML = `<div class="empty">${esc(t('noVideos'))}</div>`; return; }
+  box.innerHTML = Lb.map(x => `
+    <div class="item" data-v="${esc(x.vid)}">
+      <img loading="lazy" src="https://i.ytimg.com/vi/${esc(x.vid)}/mqdefault.jpg" alt="">
+      <div class="t"><b dir="auto">${esc(x.title || x.vid)}</b>
+        <span>${x.n} ${esc(t('sentences'))}${x.lang ? ' · '+esc(x.lang.toUpperCase()) : ''} · 🎯 ${x.score || 0}/100</span></div>
+      <button class="del" data-del="${esc(x.vid)}" aria-label="×">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>`).join('');
+}
+$('#lib').addEventListener('click', e => {
+  const d = e.target.closest('[data-del]');
+  if (d){ e.stopPropagation(); const v = d.dataset.del; LS.set(P+'lib', lib().filter(x => x.vid !== v)); LS.del(P+'v:'+v); renderLib(); toast(t('deleted')); return; }
+  const it = e.target.closest('.item'); if (it) location.hash = 'v=' + it.dataset.v;
+});
+
+/* ================= home / routing ================= */
+function homeError(msg){ const b = $('#homemsg'); b.textContent = msg; b.classList.remove('hidden'); }
+$('#form').addEventListener('submit', e => {
+  e.preventDefault(); $('#homemsg').classList.add('hidden');
+  const v = vidFrom($('#url').value);
+  if (!v){ homeError(t('badUrl')); return; }
+  $('#url').value = ''; $('#url').blur(); location.hash = 'v=' + v;
+});
+$('#paste').addEventListener('click', async () => {
+  try { const x = await navigator.clipboard.readText(); $('#url').value = x.trim(); if (vidFrom(x)) $('#form').requestSubmit(); }
+  catch(e){ $('#url').focus(); toast(t('pasteHint')); }
+});
+function route(){
+  const h = location.hash.replace(/^#/, '');
+  const m = h.match(/(?:^|&)v=([A-Za-z0-9_-]{11})/);
+  if (m) return openVideo(m[1]);
+  if (h === 'setup') return showSetup();
+  showHome();
+  const msg = h.match(/(?:^|&)msg=([^&]*)/);
+  if (msg){ let x; try { x = decodeURIComponent(msg[1]); } catch(e){ x = msg[1]; } homeError(x); }
+}
+function showHome(){
+  stopVideo();
+  $('#player').classList.add('hidden'); $('#setup').classList.add('hidden'); $('#home').classList.remove('hidden');
+  $('#homemsg').classList.add('hidden'); document.title = 'Shadowing'; renderLib();
+}
+function showSetup(){
+  stopVideo();
+  $('#player').classList.add('hidden'); $('#home').classList.add('hidden'); $('#setup').classList.remove('hidden');
+  document.title = t('setupTitle') + ' · Shadowing'; window.scrollTo(0, 0);
+}
+window.addEventListener('hashchange', route);
+$('#back').addEventListener('click', () => { if (history.length > 1 && st.cameFromHome) history.back(); else location.hash = ''; });
+$('#setupBack').addEventListener('click', () => { location.hash = ''; });
+
+/* ================= iPhone Shortcut + computer bookmarklet ================= */
+// YouTube blocks the server, so the phone/browser asks YouTube for the video's data and posts it to /api/ingest.
+const COPY = { req: (API || location.origin) + '/api/req?u=', yt: 'https://www.youtube.com/youtubei/v1/player', ingest: INGEST_URL };
+document.querySelectorAll('#setup .copy').forEach(box => {
+  const code = box.querySelector('code'); code.textContent = COPY[code.dataset.c];
+  box.querySelector('button').addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(code.textContent); toast(t('copied'), 1400); }
+    catch(e){ const r = document.createRange(); r.selectNodeContents(code); const s = getSelection(); s.removeAllRanges(); s.addRange(r); toast(t('selected'), 2000); }
+  });
+});
+const SRV = API || location.origin;
+const BM = `(async()=>{try{const v=new URL(location.href).searchParams.get('v')||(location.pathname.match(/\\/(?:shorts|live|embed)\\/([\\w-]{11})/)||[])[1];if(!/youtube\\.com$/.test(location.hostname)||!v){alert('YouTube?');return}document.title='⏳ Shadowing';const b=await(await fetch('${SRV}/api/req?u='+v)).text();const p=await(await fetch('/youtubei/v1/player?prettyPrint=false',{method:'POST',body:b,credentials:'omit'})).text();location.href=await(await fetch('${INGEST_URL}',{method:'POST',body:p})).text()}catch(e){alert('Shadowing: '+e)}})()`;
+$('#bm').href = 'javascript:' + encodeURIComponent(BM);
+$('#bm').addEventListener('click', e => { e.preventDefault(); toast(t('dragHint'), 3500); });
+
+/* ================= YouTube player ================= */
+let ytReady;
+function loadYT(){
+  if (ytReady) return ytReady;
+  ytReady = new Promise(res => {
+    if (window.YT && YT.Player) return res();
+    window.onYouTubeIframeAPIReady = () => res();
+    const s = document.createElement('script'); s.src = 'https://www.youtube.com/iframe_api'; document.head.appendChild(s);
+  });
+  return ytReady;
+}
+function stopVideo(){
+  clearPending(); stopMic(); st.trToken++;
+  if (st.player){ try{ saveVideo(); st.player.destroy(); }catch(e){} }
+  st.player = null; st.ready = false; st.vid = null; st.data = null; st.S = []; st.ccHidden = false;
+  st.range = null; st.pick = false; st.pickA = null; $('#range').classList.remove('on','pick');
+  $('#vwrap').innerHTML = '';
+}
+function hideCC(){ try{ st.player.unloadModule('captions'); st.player.unloadModule('cc'); }catch(e){} }
+async function makePlayer(vid, startAt){
+  await loadYT();
+  if (st.vid !== vid) return;
+  $('#vwrap').innerHTML = '<div id="yt"></div>';
+  st.player = new YT.Player('yt', {
+    videoId: vid, width: '100%', height: '100%',
+    playerVars: { playsinline:1, rel:0, modestbranding:1, controls:1, iv_load_policy:3, cc_load_policy:0, start: Math.floor(startAt||0), origin: location.origin },
+    events: {
+      onReady: () => {
+        st.ready = true;
+        try { st.player.setPlaybackRate(settings.speed); } catch(e){}
+        hideCC();
+        try { const x = st.player.getVideoData().title; if (x && st.data && !st.data.title){ st.data.title = x; setHeader(); saveSoon(); } } catch(e){}
+      },
+      onStateChange: e => { setPlayIcon(e.data === 1 || e.data === 3); if (e.data === 1){ try{ st.player.setPlaybackRate(settings.speed); }catch(_){} if (!st.ccHidden){ st.ccHidden = true; hideCC(); } } },
+      onError: e => { toast(e.data === 101 || e.data === 150 ? t('embedBlocked') : t('videoErr', {e: e.data}), 5000); }
+    }
+  });
+}
+function setPlayIcon(playing){ $('#icoPlay').classList.toggle('hidden', playing); $('#icoPause').classList.toggle('hidden', !playing); }
+function isPlaying(){ try{ const s = st.player.getPlayerState(); return s === 1 || s === 3; }catch(e){ return false; } }
+function pauseVideo(){ try{ st.player && st.player.pauseVideo(); }catch(e){} }
+
+/* ================= open a video ================= */
+async function openVideo(vid, opts={}){
+  if (st.vid === vid && !opts.fresh && st.data) return;
+  const fromHome = !$('#home').classList.contains('hidden');
+  stopVideo();
+  st.cameFromHome = fromHome; st.vid = vid;
+  $('#home').classList.add('hidden'); $('#setup').classList.add('hidden'); $('#player').classList.remove('hidden');
+  const cached = !opts.fresh && LS.get(P+'v:'+vid, null);
+  st.data = cached || {video_id: vid};
+  setHeader(); updateScore();
+  if (cached && cached.sentences && cached.sentences.length){ useData(cached); makePlayer(vid, (st.S[st.idx]||{}).start || 0); return; }
+  makePlayer(vid, 0);
+  $('#list').innerHTML = `<div class="state"><div class="spin"></div>${esc(t('loading'))}</div>`;
+  try {
+    const q = new URLSearchParams({url: vid, raw: '1'}); if (opts.lang) q.set('lang', opts.lang); if (opts.fresh) q.set('fresh', '1');
+    let r; try { r = await fetch(API + '/api/transcript?' + q); } catch(e){ throw {message: t('netFail')}; }
+    const j = await r.json().catch(() => ({error:'error'}));
+    if (st.vid !== vid) return;
+    let data;
+    if (j.need_captions){ // the device downloads YouTube's caption file and splits it itself
+      const cr = await fetch(j.url).catch(() => null);
+      const cap = cr && cr.ok ? await cr.text() : '';
+      if (st.vid !== vid) return;
+      if (!cap.trim()) throw {message: t('captionFail')};
+      const {sents, punctuated} = splitSentences(json3ToCues(JSON.parse(cap)));
+      if (!sents.length) throw {message: t('noCaptions')};
+      data = {video_id: vid, ...j.meta, punctuated, sentences: sents};
+    } else if (j.sentences && j.sentences.length){
+      data = {video_id: vid, title: j.title, language_code: j.language_code, is_generated: j.is_generated, tracks: j.tracks, punctuated: j.punctuated, sentences: resplit(j.sentences)};
+    } else if (j.error === 'no_transcript'){ throw {message: t('noCaptions')};
+    } else { throw {needShare: true, message: t('needShare')}; }
+    if (cached && cached.title && !data.title) data.title = cached.title;
+    if (st.data.title && !data.title) data.title = st.data.title;
+    useData(data); saveVideo();
+  } catch(err){
+    if (st.vid !== vid) return;
+    const msg = (err && err.message) || t('netFail');
+    $('#list').innerHTML = `<div class="state">${esc(msg)}<div class="btns">${err && err.needShare ? `<a class="pill primary" href="#setup">${esc(t('setupHow'))}</a>` : `<button class="pill primary" id="retry">${esc(t('retry'))}</button>`}<button class="pill" id="goback">${esc(t('back'))}</button></div></div>`;
+    if ($('#retry')) $('#retry').onclick = () => openVideo(vid, {fresh:true});
+    $('#goback').onclick = () => { location.hash = ''; };
+  }
+}
+function setHeader(){
+  const d = st.data || {};
+  $('#ttl').textContent = d.title || 'Shadowing';
+  document.title = d.title ? d.title + ' · Shadowing' : 'Shadowing';
+  $('#sub').textContent = st.S.length ? `${st.S.length} ${t('sentences')} · ${(d.language_code||'').toUpperCase()}` : ' ';
+}
+function useData(d){
+  d.done = Array.isArray(d.done) ? d.done.filter(i => i < (d.sentences||[]).length) : [];
+  d.tr = d.tr || {};
+  st.data = d; st.S = d.sentences || [];
+  st.idx = Math.min(Math.max(0, d.idx||0), Math.max(0, st.S.length-1)); st.reps = 0;
+  setHeader(); renderList(); setIdx(st.idx, {scroll:true, instant:true}); updateScore();
+  ensureTranslations();
+}
+
+/* ================= score /100 ================= */
+function scoreOf(d){ const n = (d.sentences||[]).length; if (!n) return 0; const k = new Set(d.done||[]).size; return k >= n ? 100 : Math.floor(k / n * 100); }
+function updateScore(){
+  const sc = st.data ? scoreOf(st.data) : 0;
+  $('#scoreNum').innerHTML = `${sc}<small>/100</small>`; $('#scoreBar').style.width = sc + '%';
+  $('#score').classList.toggle('full', sc >= 100);
+}
+
+/* ================= sentence list ================= */
+const MIC_SVG = '<svg class="ic-mic" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v1a7 7 0 0 0 14 0v-1"/><path d="M12 18v4"/></svg>'
+  + '<svg class="ic-ok" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+function currentTr(){ const l = trLang(); if (l === 'off' || !st.data) return null; return (st.data.tr || {})[l] || null; }
+function renderList(){
+  const tr = currentTr(), done = new Set(st.data.done || []), trDir = RTL_LANGS.has(trLang()) ? 'rtl' : 'ltr';
+  $('#list').innerHTML = st.S.map((s, i) => `
+    <div class="card" data-i="${i}">
+      <div class="row"><span class="ts">${fmt(s.start)}</span><span class="reps"></span><span class="sp"></span>
+        <button class="say" data-say="${i}" aria-label="${esc(t('sayBtn'))}">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M11 5L6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.4 5.6a9 9 0 0 1 0 12.8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <button class="mic${done.has(i) ? ' ok' : ''}" data-mic="${i}" aria-label="${esc(t('micBtn'))}">${MIC_SVG}</button></div>
+      <div class="txt" dir="auto">${esc(s.text)}</div>
+      <div class="tr" dir="${trDir}">${tr && tr[i] ? esc(tr[i]) : ''}</div>
+      <div class="heard" dir="auto"></div>
+      <div class="waitnote">${esc(t('tapContinue'))}</div>
+      <div class="prog"></div>
+    </div>`).join('');
+  st.cards = Array.from(document.querySelectorAll('#list .card'));
+  markRange();
+}
+$('#list').addEventListener('click', e => {
+  const card = e.target.closest('.card'); if (!card) return;
+  const i = +card.dataset.i;
+  if (e.target.closest('[data-mic]')){ startMic(i); return; }
+  if (st.pick){ pickRange(i); return; }
+  const say = e.target.closest('[data-say]');
+  if (!say && st.pending && i === st.idx && $('#list .card.wait.tap')) { runPending(); return; }
+  if (st.range && (i < st.range.a || i > st.range.b)) clearRange(true);
+  clearPending(); st.reps = 0; setIdx(i); seekPlay(i);
+});
+['touchstart','wheel','mousedown'].forEach(ev => $('#list').addEventListener(ev, () => { st.userScrollAt = Date.now(); }, {passive:true}));
+function setIdx(i, o={}){
+  if (!st.S.length) return;
+  i = Math.max(0, Math.min(st.S.length-1, i));
+  const prev = st.cards[st.idx]; if (prev){ prev.classList.remove('on','wait','tap'); const p = prev.querySelector('.prog'); p.style.transition='none'; p.style.width='0'; }
+  st.idx = i;
+  const c = st.cards[i]; if (!c) return;
+  c.classList.add('on'); updateReps();
+  if (o.scroll || Date.now() - st.userScrollAt > 2500) c.scrollIntoView({block: o.instant ? 'start' : 'center', behavior: o.instant ? 'auto' : 'smooth'});
+  saveSoon();
+}
+function updateReps(){
+  document.body.classList.toggle('loopmode', !!(settings.loop || st.range));
+  const c = st.cards[st.idx]; if (!c) return;
+  c.querySelector('.reps').textContent = '↻ ' + (st.reps + 1) + (settings.reps ? ' / ' + settings.reps : '');
+}
+function findIdx(x){ const S = st.S; let lo = 0, hi = S.length - 1, ans = S.length - 1;
+  while (lo <= hi){ const m = (lo+hi) >> 1; if (S[m].end > x){ ans = m; hi = m - 1; } else lo = m + 1; } return ans; }
+
+/* ================= repeat a group of sentences ================= */
+function markRange(){
+  st.cards.forEach((c, i) => {
+    c.classList.toggle('inrange', !!st.range && i >= st.range.a && i <= st.range.b);
+    c.classList.toggle('pickA', st.pick && st.pickA === i);
+  });
+  $('#range').classList.toggle('on', !!st.range); $('#range').classList.toggle('pick', st.pick);
+  updateReps();
+}
+function clearRange(silent){ st.range = null; st.pick = false; st.pickA = null; markRange(); if (!silent) toast(t('rangeOff'), 1600); }
+function pickRange(i){
+  if (st.pickA == null){ st.pickA = i; markRange(); toast(t('pickLast'), 2500); return; }
+  const a = Math.min(st.pickA, i), b = Math.max(st.pickA, i);
+  st.pick = false; st.pickA = null; st.range = {a, b}; st.reps = 0; markRange();
+  toast(t('rangeOn', {a: a + 1, b: b + 1}), 2200);
+  clearPending(); setIdx(a, {scroll:true}); seekPlay(a);
+}
+$('#range').addEventListener('click', () => {
+  if (st.range || st.pick){ clearRange(); return; }
+  if (!st.S.length) return;
+  st.pick = true; st.pickA = null; pauseVideo(); markRange(); toast(t('pickFirst'), 2500);
+});
+
+/* ================= playback engine ================= */
+function seekPlay(i){
+  if (!st.ready || !st.S[i]) return;
+  const target = Math.max(0, st.S[i].start - 0.12);
+  try { st.player.seekTo(target, true); st.player.playVideo(); } catch(e){}
+  st.seekTarget = target; st.seekAt = performance.now(); st.seekDeadline = st.seekAt + 1600;
+  hintIfStuck();
+}
+function hintIfStuck(){
+  if (st.hinted) return;
+  setTimeout(() => { if (!st.player || st.pending || isPlaying() || st.hinted || st.rec) return; st.hinted = true; toast(t('iosTap'), 5000); }, 2200);
+}
+function clearPending(){ clearTimeout(st.gapTimer); st.gapTimer = null; st.pending = null; const c = st.cards[st.idx]; if (c) c.classList.remove('wait','tap'); }
+function runPending(){ const f = st.pending; clearPending(); if (f) f(); }
+function afterGap(fn, from){
+  const S = st.S; let ms = 0;
+  if (settings.gap === 'tap') ms = Infinity;
+  else if (settings.gap === 'len'){ const a = S[from != null ? from : st.idx]; ms = (S[st.idx].end - a.start) * 1000 / (settings.speed || 1) + 400; }
+  else ms = (+settings.gap || 0) * 1000;
+  if (!ms){ fn(); return; }
+  pauseVideo(); st.pending = fn;
+  const c = st.cards[st.idx];
+  if (c){
+    c.classList.add('wait'); c.classList.toggle('tap', ms === Infinity);
+    const p = c.querySelector('.prog');
+    if (ms !== Infinity){ p.style.transition = 'none'; p.style.width = '100%'; void p.offsetWidth; p.style.transition = `width ${ms}ms linear`; p.style.width = '0'; }
+  }
+  if (ms !== Infinity) st.gapTimer = setTimeout(runPending, ms);
+}
+function onEnd(){
+  const S = st.S, i = st.idx;
+  if (st.range){
+    const {a, b} = st.range;
+    if (i < b){ setIdx(i + 1); return; }            // keep going through the group
+    st.reps++;
+    if (settings.reps && st.reps >= settings.reps){ st.reps = 0; clearRange(true); if (i < S.length - 1) afterGap(() => { setIdx(i + 1); seekPlay(i + 1); }); else pauseVideo(); return; }
+    updateReps(); afterGap(() => { setIdx(a); seekPlay(a); }, a); return;
+  }
+  if (settings.loop){
+    st.reps++;
+    if (settings.reps && st.reps >= settings.reps){
+      st.reps = 0;
+      if (i >= S.length - 1){ pauseVideo(); updateReps(); return; }
+      afterGap(() => { setIdx(i + 1); seekPlay(i + 1); });
+    } else { updateReps(); afterGap(() => seekPlay(i)); }
+  } else {
+    if (i >= S.length - 1) return;
+    if (settings.gap !== '0') afterGap(() => { setIdx(i + 1); seekPlay(i + 1); });
+    else setIdx(i + 1);
+  }
+}
+function tick(){
+  if (!st.ready || !st.player || !st.S.length || !st.player.getPlayerState) return;
+  let ps, x;
+  try { ps = st.player.getPlayerState(); x = st.player.getCurrentTime(); } catch(e){ return; }
+  const s = st.S[st.idx], c = st.cards[st.idx];
+  if (c && !st.pending){
+    const pct = Math.max(0, Math.min(1, (x - s.start) / Math.max(0.2, s.end - s.start)));
+    const p = c.querySelector('.prog'); p.style.transition = 'none'; p.style.width = (pct*100).toFixed(1) + '%';
+  }
+  if (ps !== 1 || st.pending || st.rec) return;
+  if (st.seekTarget != null){
+    const settled = performance.now() - st.seekAt > 250 && Math.abs(x - st.seekTarget) < 0.9;
+    if (settled || performance.now() > st.seekDeadline) st.seekTarget = null; else return;
+  }
+  if (x < s.start - 0.7 || x > s.end + 0.7){ const j = findIdx(x); if (j !== st.idx){ st.reps = 0; setIdx(j); return; } }
+  if (x >= s.end - 0.04) onEnd();
+}
+setInterval(tick, 50);
+function togglePlay(){
+  if (!st.player || !st.ready) return;
+  if (st.pending){ runPending(); return; }
+  if (isPlaying()){ pauseVideo(); return; }
+  const x = st.player.getCurrentTime(), s = st.S[st.idx];
+  if (s && (x < s.start - 0.7 || x >= s.end - 0.05)) seekPlay(st.idx); else { st.player.playVideo(); hintIfStuck(); }
+}
+function jump(d){
+  if (!st.S.length) return; clearPending(); st.reps = 0;
+  const i = Math.max(0, Math.min(st.S.length-1, st.idx + d));
+  if (st.range && (i < st.range.a || i > st.range.b)) clearRange(true);
+  setIdx(i, {scroll:true}); seekPlay(i);
+}
+function setLoopBtn(){ $('#loop').classList.toggle('on', !!settings.loop); updateReps(); }
+$('#play').addEventListener('click', togglePlay);
+$('#prev').addEventListener('click', () => jump(-1));
+$('#next').addEventListener('click', () => jump(1));
+$('#loop').addEventListener('click', () => { settings.loop = !settings.loop; saveSettings(); st.reps = 0; setLoopBtn(); toast(settings.loop ? t('loopOn') : t('loopOff'), 1600); });
+document.addEventListener('keydown', e => {
+  if ($('#player').classList.contains('hidden') || /input|select|textarea/i.test(e.target.tagName)) return;
+  if (e.code === 'Space'){ e.preventDefault(); togglePlay(); }
+  else if (e.key === 'ArrowRight' || e.key === 'ArrowDown'){ e.preventDefault(); jump(1); }
+  else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp'){ e.preventDefault(); jump(-1); }
+  else if (e.key === 'r' || e.key === 'R'){ $('#loop').click(); }
+  else if (e.key === 'm' || e.key === 'M'){ startMic(st.idx); }
+});
+
+/* ================= microphone: say the sentence ================= */
+function micBtn(i){ return st.cards[i] && st.cards[i].querySelector('.mic'); }
+function stopMic(){ if (st.rec){ try{ st.rec.abort(); }catch(e){} st.rec = null; const b = micBtn(st.recIdx); if (b) b.classList.remove('rec'); st.recIdx = -1; } }
+function startMic(i){
+  if (!SR){ toast(t('micNo'), 4500); return; }
+  if (st.rec){ const same = st.recIdx === i; try{ st.rec.stop(); }catch(e){} if (same) return; stopMic(); }
+  clearPending(); pauseVideo();
+  if (i !== st.idx) setIdx(i);
+  const card = st.cards[i], btn = micBtn(i), heard = card.querySelector('.heard'), s = st.S[i];
+  const r = new SR();
+  r.lang = SR_LOCALE[base(st.data.language_code)] || base(st.data.language_code) || 'it-IT';
+  r.interimResults = true; r.continuous = false; r.maxAlternatives = 5;
+  let cands = [], live = '', failed = '';
+  btn.classList.remove('bad'); btn.classList.add('rec');
+  heard.className = 'heard'; heard.textContent = '🎙 …';
+  r.onresult = e => {
+    live = Array.from(e.results).map(x => x[0].transcript).join(' ');
+    heard.textContent = '🎙 ' + live;
+    const res = Array.from(e.results), maxAlt = Math.max(...res.map(x => x.length));
+    cands = Array.from({length: maxAlt}, (_, a) => res.map(x => x[Math.min(a, x.length - 1)].transcript).join(' '));
+  };
+  r.onerror = e => { failed = e.error || 'error'; };
+  r.onend = () => {
+    clearTimeout(st.recTimer);
+    if (st.rec !== r) return;
+    st.rec = null; st.recIdx = -1; btn.classList.remove('rec');
+    if (failed === 'not-allowed' || failed === 'service-not-allowed'){ heard.textContent = ''; toast(t('micDenied'), 5000); return; }
+    if (!cands.length && !live){ heard.textContent = ''; if (failed !== 'aborted') toast(t('micNothing'), 3000); return; }
+    let best = '', score = -1;
+    for (const c of (cands.length ? cands : [live])){ const sc = similarity(s.text, c); if (sc > score){ score = sc; best = c; } }
+    const okNow = score >= PASS, pct = Math.round(score * 100);
+    heard.className = 'heard ' + (okNow ? 'good' : 'wrong');
+    heard.textContent = `${okNow ? '✓' : '✗'} ${t('heard')}: ${best} (${pct}%)`;
+    if (okNow){
+      btn.classList.add('ok');
+      const done = new Set(st.data.done || []); const before = scoreOf(st.data); done.add(i); st.data.done = [...done];
+      updateScore(); saveSoon();
+      if (scoreOf(st.data) >= 100 && before < 100) toast(t('full'), 6000);
+    } else {
+      const wasOk = btn.classList.contains('ok');
+      btn.classList.remove('ok'); btn.classList.add('bad');
+      setTimeout(() => { btn.classList.remove('bad'); if (wasOk) btn.classList.add('ok'); }, 1600);
+    }
+  };
+  try { r.start(); } catch(e){ btn.classList.remove('rec'); toast(t('micNo'), 4000); return; }
+  st.rec = r; st.recIdx = i;
+  st.recTimer = setTimeout(() => { try{ r.stop(); }catch(e){} }, Math.min(15000, (s.end - s.start) * 2000 + 4000));
+}
+
+/* ================= translation into the page ================= */
+async function ensureTranslations(){
+  const lang = trLang(), S = st.S;
+  const trDir = RTL_LANGS.has(lang) ? 'rtl' : 'ltr';
+  document.querySelectorAll('#list .tr').forEach((el, i) => { const tr = currentTr(); el.dir = trDir; el.textContent = tr && tr[i] ? tr[i] : ''; });
+  if (lang === 'off' || !S.length || base(st.data.language_code) === lang) return;
+  const arr = st.data.tr[lang] = st.data.tr[lang] || new Array(S.length).fill(null);
+  const token = ++st.trToken, vid = st.vid, CH = 40;
+  const starts = []; const first = Math.floor(st.idx / CH) * CH;
+  for (let a = first; a < S.length; a += CH) starts.push(a);
+  for (let a = 0; a < first; a += CH) starts.push(a);
+  let failed = 0;
+  for (const a of starts){
+    const idxs = []; for (let i = a; i < Math.min(S.length, a + CH); i++) if (!arr[i]) idxs.push(i);
+    if (!idxs.length) continue;
+    let res = [];
+    try { res = await translateLines(idxs.map(i => S[i].text), base(st.data.language_code), lang); } catch(e){}
+    if (token !== st.trToken || vid !== st.vid) return;
+    idxs.forEach((i, k) => { if (res[k]){ arr[i] = res[k]; const el = st.cards[i] && st.cards[i].querySelector('.tr'); if (el) el.textContent = res[k]; } else failed++; });
+  }
+  if (failed) toast(t('trFail'), 3500);
+  saveSoon();
+}
+
+/* ================= settings sheet ================= */
+function buildSheet(){
+  const O = OPTIONS();
+  document.querySelectorAll('#sheet .seg[data-key]').forEach(seg => {
+    const key = seg.dataset.key, cur = key === 'tr' ? trLang() : settings[key];
+    seg.innerHTML = O[key].map(([v, l]) => `<button type="button" data-v="${v}" class="${String(cur) === String(v) ? 'sel' : ''}">${esc(l)}</button>`).join('');
+  });
+  const d = st.data || {}, tracks = d.tracks || [], sel = $('#track');
+  sel.innerHTML = tracks.map(x => `<option value="${esc(x.code)}" ${base(x.code) === base(d.language_code) ? 'selected' : ''}>${esc(x.name || x.code)}</option>`).join('');
+  sel.classList.toggle('hidden', tracks.length < 2);
+}
+function applyFont(){ document.documentElement.style.setProperty('--font', FONT[settings.font] || '20px'); }
+function closeSheet(){ $('#sheet').classList.add('hidden'); $('#sheetbg').classList.add('hidden'); }
+$('#gear').addEventListener('click', () => { buildSheet(); $('#sheet').classList.remove('hidden'); $('#sheetbg').classList.remove('hidden'); });
+$('#sheetbg').addEventListener('click', closeSheet);
+$('#sheet').addEventListener('click', e => {
+  const b = e.target.closest('.seg[data-key] button'); if (!b) return;
+  const key = b.parentElement.dataset.key; let v = b.dataset.v;
+  if (key === 'speed' || key === 'reps') v = +v;
+  settings[key] = v; saveSettings();
+  if (key === 'speed' && st.player) try{ st.player.setPlaybackRate(v); }catch(e){}
+  if (key === 'font') applyFont();
+  if (key === 'reps'){ st.reps = 0; updateReps(); }
+  if (key === 'tr' && st.data){ renderList(); setIdx(st.idx); ensureTranslations(); }
+  if (key === 'gap' && st.pending && v === '0') runPending();
+  if (key === 'ui'){ applyLang(); if (st.data && st.S.length){ setHeader(); renderList(); setIdx(st.idx); ensureTranslations(); } else renderLib(); }
+  buildSheet();
+});
+$('#resetScore').addEventListener('click', () => { if (!st.data) return; st.data.done = []; st.cards.forEach(c => { c.querySelector('.mic').classList.remove('ok'); c.querySelector('.heard').textContent = ''; }); updateScore(); saveSoon(); toast(t('scoreReset'), 1500); });
+$('#track').addEventListener('change', e => { closeSheet(); openVideo(st.vid, {fresh:true, lang:e.target.value}); });
+$('#refetch').addEventListener('click', () => { const v = st.vid; closeSheet(); if (v) openVideo(v, {fresh:true, lang: st.data && st.data.language_code}); });
+
+/* ================= start ================= */
+applyLang(); applyFont(); setLoopBtn();
+document.addEventListener('visibilitychange', () => { if (document.hidden){ saveVideo(); stopMic(); } });
+window.addEventListener('pagehide', saveVideo);
+(function boot(){
+  const q = new URLSearchParams(location.search);
+  const v = vidFrom(q.get('v') || q.get('url') || '');
+  if (v && !location.hash) history.replaceState(null, '', location.pathname + '#v=' + v);
+  route();
+})();
+// exposed for tests only
+window.__shadow = {splitSentences, json3ToCues, resplit, similarity, stripFillers, dscore, scoreOf};
+})();
+</script>
+</body>
+</html>

@@ -73,7 +73,7 @@ if clip.exists():
         time.sleep(10)
     print(f"::notice title=ASR warm-up::{json.dumps(asr)}")
     data = clip.read_bytes()
-    for model in os.environ.get("ASR_TEST_MODELS", "small,base").split(","):
+    for model in os.environ.get("ASR_TEST_MODELS", "small,base,tiny").split(","):
         res = []
         for _ in range(2):
             t0 = time.time()

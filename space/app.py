@@ -817,6 +817,32 @@ _ASR_RUN = threading.Lock()
 _ASR_STATE = {"ready": False, "error": "", "load_secs": 0.0}
 
 
+def cpu_limit():
+    """CPUs this container may really use (os.cpu_count() reports the whole machine: 192 on Spaces)."""
+    n = None
+    try:
+        q, p = open("/sys/fs/cgroup/cpu.max").read().split()[:2]
+        if q != "max":
+            n = int(q) / int(p)
+    except Exception:  # noqa: BLE001
+        try:
+            q = int(open("/sys/fs/cgroup/cpu/cpu.cfs_quota_us").read())
+            p = int(open("/sys/fs/cgroup/cpu/cpu.cfs_period_us").read())
+            if q > 0:
+                n = q / p
+        except Exception:  # noqa: BLE001
+            pass
+    try:
+        aff = len(os.sched_getaffinity(0))
+    except Exception:  # noqa: BLE001
+        aff = os.cpu_count() or 1
+    n = aff if n is None else min(aff, n)
+    return max(1, int(n))
+
+
+ASR_THREADS = int(os.getenv("ASR_THREADS", "0")) or min(8, cpu_limit())
+
+
 def asr_model(name):
     with _ASR_LOAD:
         m = _ASR.get(name)
@@ -824,7 +850,7 @@ def asr_model(name):
             from faster_whisper import WhisperModel
 
             t0 = time.time()
-            m = WhisperModel(name, device="cpu", compute_type="int8", cpu_threads=max(1, os.cpu_count() or 1))
+            m = WhisperModel(name, device="cpu", compute_type="int8", cpu_threads=ASR_THREADS, num_workers=1)
             _ASR[name] = m
             if name == ASR_MODEL:
                 _ASR_STATE["load_secs"] = round(time.time() - t0, 1)
@@ -924,6 +950,8 @@ def health():
         "v3": os.path.exists(os.path.join(HERE, "v3.html")),
         "deployed_from": os.getenv("DEPLOYED_FROM", "") or _deployed_sha(),
         "cpus": os.cpu_count(),
+        "cpu_limit": cpu_limit(),
+        "asr_threads": ASR_THREADS,
         "asr_model": ASR_MODEL,
         "asr": _ASR_STATE,
     }

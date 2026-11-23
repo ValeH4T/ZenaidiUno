@@ -1,4 +1,4 @@
-"""Build the iOS Shortcut "Shadowing 3" (share sheet: YouTube video -> lesson on the GitHub page).
+"""Build the iOS Shortcut "Shadowing" (share sheet: YouTube video -> lesson on the GitHub page).
 
 The Shortcut makes the one request YouTube refuses from the server (with the phone's own connection):
   1. GET  {space}/api/req?u=<shared link>        -> the request body for YouTube
@@ -57,7 +57,7 @@ workflow = {
     "WFWorkflowHasShortcutInputVariables": True,
     "WFWorkflowActions": actions,
 }
-out = sys.argv[1] if len(sys.argv) > 1 else "Shadowing 3.shortcut"
+out = sys.argv[1] if len(sys.argv) > 1 else "Shadowing.shortcut"
 with open(out, "wb") as f:
     plistlib.dump(workflow, f, fmt=plistlib.FMT_BINARY)
 print("wrote", out)

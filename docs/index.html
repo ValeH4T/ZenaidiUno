@@ -296,7 +296,7 @@ const ON_SPACE = /\.hf\.space$/.test(location.hostname);
 const API = ON_SPACE ? '' : 'https://zenaidiuno-shadowing-v2.hf.space';
 const PAGE_ID = ON_SPACE ? 'v3' : 'gh';
 const INGEST_URL = (API || location.origin) + '/api/ingest?to=' + PAGE_ID;
-// iCloud link of a ready-made Shadowing 3 shortcut (shared from the Shortcuts app). Empty = only the build-it-yourself steps.
+// iCloud link of a ready-made Shadowing shortcut (shared from the Shortcuts app). Empty = only the build-it-yourself steps.
 const SHORTCUT_LINK = '';
 
 /* ================= storage ================= */
@@ -312,12 +312,12 @@ const STR = {
 ar: {
   tag:'الصق رابط فيديو يوتيوب، وتمرّن عليه جملة جملة.', start:'ابدأ', paste:'لصق', yourVideos:'فيديوهاتك',
   noVideos:'ما فيه فيديوهات للحين. الفيديوهات اللي تفتحها تنحفظ هنا في جهازك.',
-  howNew:'طريقة فتح فيديو جديد', fromIphone:'📱 من الآيفون', iphoneHow:'في تطبيق يوتيوب اضغط «مشاركة» ثم «Shadowing 3»، ويفتح الدرس هنا مباشرة.',
+  howNew:'طريقة فتح فيديو جديد', fromIphone:'📱 من الآيفون', iphoneHow:'في تطبيق يوتيوب اضغط «مشاركة» ثم «Shadowing»، ويفتح الدرس هنا مباشرة.',
   setupBtn:'إعداد الاختصار (مرة وحدة)', fromComputer:'💻 من الكمبيوتر',
   bmHow:'اسحب هذا الزر لشريط المفضلة، وبعدين اضغطه وأنت فاتح أي فيديو في يوتيوب:',
   dragHint:'اسحب الزر لشريط المفضلة، واضغطه وأنت في صفحة فيديو يوتيوب', badUrl:'الرابط مو واضح. الصق رابط فيديو يوتيوب كامل.',
   pasteHint:'اضغط مطوّل في الخانة واختر لصق', deleted:'انحذف من القائمة', sentences:'جملة', stoppedAt:'وقفت عند',
-  loading:'أجيب نص الفيديو وأقسّمه لجمل…', needShare:'افتح هذا الفيديو من تطبيق يوتيوب: اضغط «مشاركة» ثم «Shadowing 3». (يوتيوب يمنع سيرفر التطبيق من جلب النص مباشرة.)',
+  loading:'أجيب نص الفيديو وأقسّمه لجمل…', needShare:'افتح هذا الفيديو من تطبيق يوتيوب: اضغط «مشاركة» ثم «Shadowing». (يوتيوب يمنع سيرفر التطبيق من جلب النص مباشرة.)',
   noCaptions:'هذا الفيديو ما فيه ترجمة نصية (Captions) على يوتيوب، فما أقدر أقسّمه لجمل.', captionFail:'يوتيوب ما أعطى ملف الترجمة. افتح الفيديو من المشاركة مرة ثانية.',
   netFail:'ما قدرت أوصل للسيرفر. تأكد من النت وجرّب مرة ثانية.', setupHow:'طريقة الإعداد', retry:'حاول مرة ثانية', back:'رجوع',
   settings:'الإعدادات', speed:'سرعة الفيديو', reps:'كم مرة يتكرر (لما يكون التكرار شغّال)',
@@ -335,26 +335,26 @@ ar: {
   copy:'نسخ', copied:'انسخ ✓', selected:'محدد. اضغط نسخ',
   playPause:'تشغيل / إيقاف', prev:'الجملة السابقة', next:'الجملة التالية', loopBtn:'تكرار الجملة', rangeBtn:'تكرار مجموعة جمل', micBtn:'اختبر نطقك', sayBtn:'إعادة الجملة',
   setupTitle:'إعداد اختصار الآيفون',
-  setupLead:'تسويه مرة وحدة بس. بعدها من أي فيديو في يوتيوب تضغط «مشاركة» ثم «Shadowing 3»، ويفتح الدرس في هذه الصفحة. الاختصار يستخدم نت جوالك، فيوتيوب ما يحجبه.',
-  quickTitle:'الطريقة الأسهل (دقيقة وحدة):', quickHow:'اضغط الزر تحت، وبعدها اضغط «إضافة اختصار». بس كذا.', quickBtn:'أضف اختصار Shadowing 3',
+  setupLead:'تسويه مرة وحدة بس. بعدها من أي فيديو في يوتيوب تضغط «مشاركة» ثم «Shadowing»، ويفتح الدرس في هذه الصفحة. الاختصار يستخدم نت جوالك، فيوتيوب ما يحجبه.',
+  quickTitle:'الطريقة الأسهل (دقيقة وحدة):', quickHow:'اضغط الزر تحت، وبعدها اضغط «إضافة اختصار». بس كذا.', quickBtn:'أضف اختصار Shadowing',
   buildTitle:'خطوات الإعداد (تقريباً 5 دقايق):', buildOr:'أو سوّه بنفسك (تقريباً 5 دقايق):',
-  s1:'افتح تطبيق «الاختصارات» (Shortcuts)، واضغط + فوق، وسمّ الاختصار Shadowing 3.',
+  s1:'افتح تطبيق «الاختصارات» (Shortcuts)، واضغط + فوق، وسمّ الاختصار Shadowing.',
   s2:'أضف إجراء «الحصول على محتويات URL» (Get Contents of URL). اضغط على خانة الرابط والصق:', s2b:'وبعد آخر حرف مباشرة اختر المتغير «مدخلات الاختصار» (Shortcut Input).',
   s3:'أضف «الحصول على محتويات URL» ثاني، والرابط:', s3b:'اضغط «إظهار المزيد»، واختر الطريقة POST، ونص الطلب «ملف» (File)، والملف «محتويات URL» (نتيجة الخطوة 2).',
   s4:'أضف «الحصول على محتويات URL» ثالث، والرابط:', s4b:'الطريقة POST، ونص الطلب «ملف»، والملف «محتويات URL» (نتيجة الخطوة 3).',
   s5:'أضف إجراء «فتح عناوين URL» (Open URLs)، واختر «محتويات URL» (نتيجة الخطوة 4).',
   s6:'من زر ⓘ تحت (تفاصيل الاختصار) فعّل «إظهار في ورقة المشاركة» (Show in Share Sheet).',
-  useTitle:'الاستخدام:', u1:'افتح الفيديو في تطبيق يوتيوب.', u2:'اضغط «مشاركة».', u3:'اضغط «المزيد» واختر Shadowing 3.', u4:'أول مرة بيسألك أكثر من مرة عن السماح بالاتصال. اختر «السماح دائماً» كل مرة.'
+  useTitle:'الاستخدام:', u1:'افتح الفيديو في تطبيق يوتيوب.', u2:'اضغط «مشاركة».', u3:'اضغط «المزيد» واختر Shadowing.', u4:'أول مرة بيسألك أكثر من مرة عن السماح بالاتصال. اختر «السماح دائماً» كل مرة.'
 },
 en: {
   tag:'Paste a YouTube link and practise it sentence by sentence.', start:'Start', paste:'Paste', yourVideos:'Your videos',
   noVideos:'No videos yet. Videos you open are saved on this device.',
-  howNew:'How to open a new video', fromIphone:'📱 From iPhone', iphoneHow:'In the YouTube app, tap “Share”, then “Shadowing 3”. The lesson opens here.',
+  howNew:'How to open a new video', fromIphone:'📱 From iPhone', iphoneHow:'In the YouTube app, tap “Share”, then “Shadowing”. The lesson opens here.',
   setupBtn:'Set up the shortcut (once)', fromComputer:'💻 From a computer',
   bmHow:'Drag this button to your bookmarks bar, then click it while any YouTube video is open:',
   dragHint:'Drag the button to your bookmarks bar, then click it on a YouTube video page', badUrl:'That link isn’t clear. Paste a full YouTube video link.',
   pasteHint:'Long-press the box and choose Paste', deleted:'Removed from the list', sentences:'sentences', stoppedAt:'stopped at',
-  loading:'Getting the captions and splitting them into sentences…', needShare:'Open this video from the YouTube app: tap “Share”, then “Shadowing 3”. (YouTube blocks the app’s server from fetching captions directly.)',
+  loading:'Getting the captions and splitting them into sentences…', needShare:'Open this video from the YouTube app: tap “Share”, then “Shadowing”. (YouTube blocks the app’s server from fetching captions directly.)',
   noCaptions:'This video has no captions on YouTube, so it can’t be split into sentences.', captionFail:'YouTube didn’t return the caption file. Share the video to Shadowing again.',
   netFail:'Couldn’t reach the server. Check your connection and try again.', setupHow:'How to set it up', retry:'Try again', back:'Back',
   settings:'Settings', speed:'Video speed', reps:'How many times to repeat (when repeat is on)',
@@ -372,26 +372,26 @@ en: {
   copy:'Copy', copied:'Copied ✓', selected:'Selected. Tap Copy',
   playPause:'Play / pause', prev:'Previous sentence', next:'Next sentence', loopBtn:'Repeat sentence', rangeBtn:'Repeat a group of sentences', micBtn:'Test your pronunciation', sayBtn:'Replay sentence',
   setupTitle:'iPhone shortcut setup',
-  setupLead:'You do this once. Then from any YouTube video tap “Share”, then “Shadowing 3”, and the lesson opens on this page. The shortcut uses your phone’s internet, so YouTube doesn’t block it.',
-  quickTitle:'Easiest way (one minute):', quickHow:'Tap the button below, then “Add Shortcut”. That’s it.', quickBtn:'Add the Shadowing 3 shortcut',
+  setupLead:'You do this once. Then from any YouTube video tap “Share”, then “Shadowing”, and the lesson opens on this page. The shortcut uses your phone’s internet, so YouTube doesn’t block it.',
+  quickTitle:'Easiest way (one minute):', quickHow:'Tap the button below, then “Add Shortcut”. That’s it.', quickBtn:'Add the Shadowing shortcut',
   buildTitle:'Setup steps (about 5 minutes):', buildOr:'Or build it yourself (about 5 minutes):',
-  s1:'Open the Shortcuts app, tap + at the top, and name the shortcut Shadowing 3.',
+  s1:'Open the Shortcuts app, tap + at the top, and name the shortcut Shadowing.',
   s2:'Add the “Get Contents of URL” action. Tap its URL field and paste:', s2b:'Right after the last character, insert the variable “Shortcut Input”.',
   s3:'Add a second “Get Contents of URL” with the address:', s3b:'Tap “Show More”: Method POST, Request Body “File”, and the file “Contents of URL” (the result of step 2).',
   s4:'Add a third “Get Contents of URL” with the address:', s4b:'Method POST, Request Body “File”, file “Contents of URL” (the result of step 3).',
   s5:'Add the “Open URLs” action and choose “Contents of URL” (the result of step 4).',
   s6:'From the ⓘ button (shortcut details) turn on “Show in Share Sheet”.',
-  useTitle:'How to use it:', u1:'Open the video in the YouTube app.', u2:'Tap “Share”.', u3:'Tap “More” and choose Shadowing 3.', u4:'The first time it asks a few times to allow the connection. Choose “Always Allow” each time.'
+  useTitle:'How to use it:', u1:'Open the video in the YouTube app.', u2:'Tap “Share”.', u3:'Tap “More” and choose Shadowing.', u4:'The first time it asks a few times to allow the connection. Choose “Always Allow” each time.'
 },
 it: {
   tag:'Incolla un link di YouTube ed esercitati frase per frase.', start:'Inizia', paste:'Incolla', yourVideos:'I tuoi video',
   noVideos:'Ancora nessun video. I video che apri vengono salvati su questo dispositivo.',
-  howNew:'Come aprire un nuovo video', fromIphone:'📱 Da iPhone', iphoneHow:'Nell’app YouTube tocca «Condividi», poi «Shadowing 3». La lezione si apre qui.',
+  howNew:'Come aprire un nuovo video', fromIphone:'📱 Da iPhone', iphoneHow:'Nell’app YouTube tocca «Condividi», poi «Shadowing». La lezione si apre qui.',
   setupBtn:'Configura il comando rapido (una volta)', fromComputer:'💻 Dal computer',
   bmHow:'Trascina questo pulsante nella barra dei preferiti, poi cliccalo mentre guardi un video su YouTube:',
   dragHint:'Trascina il pulsante nella barra dei preferiti e cliccalo su una pagina video di YouTube', badUrl:'Il link non è chiaro. Incolla il link completo di un video YouTube.',
   pasteHint:'Tieni premuto nel campo e scegli Incolla', deleted:'Rimosso dall’elenco', sentences:'frasi', stoppedAt:'fermo alla',
-  loading:'Prendo i sottotitoli e li divido in frasi…', needShare:'Apri questo video dall’app YouTube: tocca «Condividi», poi «Shadowing 3». (YouTube blocca il server dell’app.)',
+  loading:'Prendo i sottotitoli e li divido in frasi…', needShare:'Apri questo video dall’app YouTube: tocca «Condividi», poi «Shadowing». (YouTube blocca il server dell’app.)',
   noCaptions:'Questo video non ha sottotitoli su YouTube, quindi non posso dividerlo in frasi.', captionFail:'YouTube non ha dato il file dei sottotitoli. Condividi di nuovo il video su Shadowing.',
   netFail:'Server non raggiungibile. Controlla la connessione e riprova.', setupHow:'Come configurarlo', retry:'Riprova', back:'Indietro',
   settings:'Impostazioni', speed:'Velocità del video', reps:'Quante ripetizioni (con la ripetizione attiva)',
@@ -409,16 +409,16 @@ it: {
   copy:'Copia', copied:'Copiato ✓', selected:'Selezionato. Tocca Copia',
   playPause:'Play / pausa', prev:'Frase precedente', next:'Frase successiva', loopBtn:'Ripeti la frase', rangeBtn:'Ripeti un gruppo di frasi', micBtn:'Prova la pronuncia', sayBtn:'Riascolta la frase',
   setupTitle:'Comando rapido per iPhone',
-  setupLead:'Lo fai una volta sola. Poi da qualsiasi video di YouTube tocchi «Condividi» e «Shadowing 3», e la lezione si apre in questa pagina. Il comando usa la connessione del telefono, quindi YouTube non lo blocca.',
-  quickTitle:'Il modo più facile (un minuto):', quickHow:'Tocca il pulsante qui sotto, poi «Aggiungi comando rapido». Fatto.', quickBtn:'Aggiungi il comando Shadowing 3',
+  setupLead:'Lo fai una volta sola. Poi da qualsiasi video di YouTube tocchi «Condividi» e «Shadowing», e la lezione si apre in questa pagina. Il comando usa la connessione del telefono, quindi YouTube non lo blocca.',
+  quickTitle:'Il modo più facile (un minuto):', quickHow:'Tocca il pulsante qui sotto, poi «Aggiungi comando rapido». Fatto.', quickBtn:'Aggiungi il comando Shadowing',
   buildTitle:'Passaggi (circa 5 minuti):', buildOr:'Oppure crealo tu (circa 5 minuti):',
-  s1:'Apri l’app Comandi Rapidi, tocca + in alto e chiama il comando Shadowing 3.',
+  s1:'Apri l’app Comandi Rapidi, tocca + in alto e chiama il comando Shadowing.',
   s2:'Aggiungi l’azione «Ottieni contenuti dell’URL». Tocca il campo URL e incolla:', s2b:'Subito dopo l’ultimo carattere inserisci la variabile «Input comando rapido».',
   s3:'Aggiungi una seconda «Ottieni contenuti dell’URL» con l’indirizzo:', s3b:'Tocca «Mostra di più»: Metodo POST, Corpo della richiesta «File», file «Contenuti dell’URL» (risultato del passo 2).',
   s4:'Aggiungi una terza «Ottieni contenuti dell’URL» con l’indirizzo:', s4b:'Metodo POST, Corpo «File», file «Contenuti dell’URL» (risultato del passo 3).',
   s5:'Aggiungi l’azione «Apri URL» e scegli «Contenuti dell’URL» (risultato del passo 4).',
   s6:'Dal pulsante ⓘ (dettagli) attiva «Mostra nel foglio di condivisione».',
-  useTitle:'Come si usa:', u1:'Apri il video nell’app YouTube.', u2:'Tocca «Condividi».', u3:'Tocca «Altro» e scegli Shadowing 3.', u4:'La prima volta chiede alcune volte il permesso di connessione: scegli «Consenti sempre» ogni volta.'
+  useTitle:'Come si usa:', u1:'Apri il video nell’app YouTube.', u2:'Tocca «Condividi».', u3:'Tocca «Altro» e scegli Shadowing.', u4:'La prima volta chiede alcune volte il permesso di connessione: scegli «Consenti sempre» ogni volta.'
 }};
 const UI_LANGS = [['auto', null], ['ar','العربية'], ['en','English'], ['it','Italiano']];
 const settings = Object.assign({speed:1, reps:0, gap:'0', tr:null, font:'m', loop:false, ui:'auto'}, LS.get(P+'settings', {}));

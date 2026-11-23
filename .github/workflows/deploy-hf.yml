@@ -19,6 +19,10 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install --quiet "huggingface_hub>=0.30"
+      - name: Make a short Italian test clip for the pronunciation check
+        run: |
+          sudo apt-get install -y -qq espeak-ng >/dev/null 2>&1 || true
+          espeak-ng -v it -s 145 -w /tmp/asr_it.wav "Due punti tirati via. Allora, ci vediamo alla prossima." || true
       - name: Upload the Space files
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}

@@ -3,7 +3,9 @@
 Runs as a free Gradio-SDK Space in Gradio's Server mode (a FastAPI app that
 Gradio launches the way Spaces expects). The server only fetches the caption
 text, splits it into sentences and translates them; the video itself plays in
-the visitor's browser through YouTube's official player. No GPU is used.
+the visitor's browser through YouTube's official player. It also checks
+pronunciation: the page sends a short recording and Whisper (on the CPU) writes
+down what it heard. No GPU is used.
 """
 import json
 import os
@@ -696,6 +698,7 @@ def api_req(u: str = ""):
 
 @app.options("/api/ingest")
 @app.options("/api/req")
+@app.options("/api/asr")
 def api_preflight():
     return Response(status_code=204, headers=CORS)
 
@@ -801,6 +804,114 @@ def api_translate(payload: dict = Body(...)):
     return {"translations": translate_many(texts, sl, tl)}
 
 
+# ------------------------------------------------------ pronunciation ---
+# The page records the sentence with the microphone and sends it here; Whisper writes down what it heard
+# and the page compares it with the sentence. (Safari's own speech recognition breaks on iPhone after the
+# page plays the video, so recording + transcribing here is the reliable path.)
+
+ASR_MODEL = os.getenv("ASR_MODEL", "small")
+ASR_MODELS = ("tiny", "base", "small")
+_ASR = {}
+_ASR_LOAD = threading.Lock()
+_ASR_RUN = threading.Lock()
+_ASR_STATE = {"ready": False, "error": "", "load_secs": 0.0}
+
+
+def asr_model(name):
+    with _ASR_LOAD:
+        m = _ASR.get(name)
+        if m is None:
+            from faster_whisper import WhisperModel
+
+            t0 = time.time()
+            m = WhisperModel(name, device="cpu", compute_type="int8", cpu_threads=max(1, os.cpu_count() or 1))
+            _ASR[name] = m
+            if name == ASR_MODEL:
+                _ASR_STATE["load_secs"] = round(time.time() - t0, 1)
+        return m
+
+
+def _warm_asr():
+    try:
+        import numpy as np
+
+        m = asr_model(ASR_MODEL)
+        list(m.transcribe(np.zeros(16000, dtype=np.float32), language="it", beam_size=1, without_timestamps=True)[0])
+        _ASR_STATE["ready"] = True
+    except Exception as e:  # noqa: BLE001
+        _ASR_STATE["error"] = f"{type(e).__name__}: {e}"[:300]
+
+
+threading.Thread(target=_warm_asr, daemon=True).start()
+
+
+def audio_from_bytes(raw: bytes):
+    """16 kHz mono float32 from a WAV (what the page sends) or any other audio file."""
+    import io
+    import wave
+
+    import numpy as np
+
+    if raw[:4] == b"RIFF" and raw[8:12] == b"WAVE":
+        with wave.open(io.BytesIO(raw)) as w:
+            ch, sw, sr, n = w.getnchannels(), w.getsampwidth(), w.getframerate(), w.getnframes()
+            frames = w.readframes(n)
+        if sw != 2:
+            raise ValueError("16-bit WAV only")
+        a = np.frombuffer(frames, dtype="<i2").astype(np.float32) / 32768.0
+        if ch > 1:
+            a = a.reshape(-1, ch).mean(axis=1)
+        if sr != 16000 and len(a):
+            a = np.interp(np.arange(0, len(a) * 16000 / sr) * sr / 16000, np.arange(len(a)), a).astype(np.float32)
+        return a
+    from faster_whisper import decode_audio
+
+    return decode_audio(io.BytesIO(raw), sampling_rate=16000)
+
+
+def transcribe(raw: bytes, lang: str, name: str):
+    audio = audio_from_bytes(raw)
+    if len(audio) < 16000 * 0.25:
+        return {"text": "", "secs": 0, "model": name, "short": True}
+    lang = base_lang(lang)
+    try:
+        from faster_whisper.tokenizer import _LANGUAGE_CODES as codes
+    except Exception:  # noqa: BLE001
+        codes = ()
+    t0 = time.time()
+    with _ASR_RUN:  # one at a time: the CPU is shared
+        segs, _info = asr_model(name).transcribe(
+            audio, language=lang if lang in codes else None, beam_size=1, best_of=1, temperature=0.0,
+            condition_on_previous_text=False, without_timestamps=True, vad_filter=False,
+        )
+        text = " ".join(s.text.strip() for s in segs).strip()
+    return {"text": text, "secs": round(time.time() - t0, 2), "model": name, "audio_secs": round(len(audio) / 16000, 2)}
+
+
+@app.post("/api/asr")
+async def api_asr(request: Request, lang: str = Query(""), model: str = Query("")):
+    from starlette.concurrency import run_in_threadpool
+
+    raw = await request.body()
+    if not raw:
+        return err("no_audio", 400)
+    if len(raw) > 3_000_000:
+        return err("too_long", 413)
+    name = model if model in ASR_MODELS else ASR_MODEL
+    try:
+        return ok(await run_in_threadpool(transcribe, raw, lang, name))
+    except Exception as e:  # noqa: BLE001
+        return err("asr_failed", 500, f"{type(e).__name__}: {e}"[:300])
+
+
+def _deployed_sha():
+    try:
+        with open(os.path.join(HERE, "DEPLOYED_FROM_GITHUB")) as f:
+            return f.read().strip()[:12] or "github"
+    except OSError:
+        return ""
+
+
 @app.get("/healthz")
 def health():
     return {
@@ -811,7 +922,10 @@ def health():
         "ingested": len(INGESTED.d),
         "youtube_ios_version": _IOS_VERSION["v"],
         "v3": os.path.exists(os.path.join(HERE, "v3.html")),
-        "deployed_from": os.getenv("DEPLOYED_FROM", "") or ("github" if os.path.exists(os.path.join(HERE, "DEPLOYED_FROM_GITHUB")) else ""),
+        "deployed_from": os.getenv("DEPLOYED_FROM", "") or _deployed_sha(),
+        "cpus": os.cpu_count(),
+        "asr_model": ASR_MODEL,
+        "asr": _ASR_STATE,
     }
 
 
